@@ -62,7 +62,7 @@ ${reset}
   body {
     height: 100vh;
     background-color: #ddd;
-    letter-spacing: -0.3px;
+    // letter-spacing: -0.3px;
 
     @media only screen and (max-width: 420px) {
       background-color: #ffffff;
