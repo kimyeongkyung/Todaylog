@@ -1,10 +1,12 @@
-import dynamic from 'next/dynamic';
-import Head from 'next/head';
-import { useRouter } from 'next/router';
-import { ReactElement, ReactNode, useEffect, useState } from 'react';
-import { GlobalStyle } from '@/styles/GlobalStyle';
-import { NextPage } from 'next';
-import { AppProps } from 'next/app';
+import dynamic from "next/dynamic";
+import Head from "next/head";
+import { useRouter } from "next/router";
+import { ReactElement, ReactNode, useEffect, useState } from "react";
+import { GlobalStyle } from "@/styles/GlobalStyle";
+import { NextPage } from "next";
+import { AppProps } from "next/app";
+import Navigation from "@/components/Navigation";
+import Header from "@/components/Header";
 
 export type NextPageWithLayout<T = unknown> = NextPage<T> & {
   getLayout?: (page: ReactElement) => ReactNode;
@@ -23,15 +25,13 @@ const options = {
   },
 };
 
-
 const MyApp = ({ Component, pageProps, router }: AppPropsWithLayout) => {
-
   const getLayout = Component.getLayout ?? ((page) => page);
   // const routers = useRouter();
   // useAuth(queryClient);
   // useResize();
   // useScrollRestoration(router);
-  
+
   return (
     <>
       <Head>
@@ -42,20 +42,22 @@ const MyApp = ({ Component, pageProps, router }: AppPropsWithLayout) => {
         <link href="/favicon.ico" rel="shortcut icon" />
       </Head>
       {/* <ThemeProvider theme={theme}> */}
-        <GlobalStyle />
-        {/* <QueryClientProvider client={queryClient}> */}
-          {/* <ReactQueryDevtools initialIsOpen={false} /> */}
-          {/* <Hydrate state={pageProps.dehydratedState}> */}
-            {/* <AppProvider> */}
-              {/* <ErrorBoundary> */}
-                {/* <RecoilRoot> */}
-                  {/* Provider를 getLayout에 넣으면 window가 에러남 */}
-                    {getLayout(<Component {...pageProps} />) as ReactElement}
-                {/* </RecoilRoot> */}
-              {/* </ErrorBoundary> */}
-            {/* </AppProvider> */}
-          {/* </Hydrate> */}
-        {/* </QueryClientProvider> */}
+      <GlobalStyle />
+      {/* <QueryClientProvider client={queryClient}> */}
+      {/* <ReactQueryDevtools initialIsOpen={false} /> */}
+      {/* <Hydrate state={pageProps.dehydratedState}> */}
+      {/* <AppProvider> */}
+      {/* <ErrorBoundary> */}
+      {/* <RecoilRoot> */}
+      {/* Provider를 getLayout에 넣으면 window가 에러남 */}
+      <Header />
+      <Navigation />
+      {getLayout(<Component {...pageProps} />) as ReactElement}
+      {/* </RecoilRoot> */}
+      {/* </ErrorBoundary> */}
+      {/* </AppProvider> */}
+      {/* </Hydrate> */}
+      {/* </QueryClientProvider> */}
       {/* </ThemeProvider> */}
     </>
   );
