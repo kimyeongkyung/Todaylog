@@ -3,6 +3,8 @@ import styled from "styled-components";
 import {
   Community,
   DarkCommunity,
+  Write,
+  DarkWrite,
   DarkMypage,
   DarkWhat,
   DarkWhere,
@@ -16,12 +18,12 @@ const Navigation = () => {
   const { push, pathname } = useRouter();
   const iconData = [
     { id: "where", Icon: Where, DarkIcon: DarkWhere, label: "어디가지" },
-    { id: "what", Icon: What, DarkIcon: DarkWhat, label: "오늘뭐하지" },
+    { id: "what", Icon: What, DarkIcon: DarkWhat, label: "오늘 뭐하지" },
     {
-      id: "community",
-      Icon: Community,
-      DarkIcon: DarkCommunity,
-      label: "커뮤니티",
+      id: "write",
+      Icon: Write,
+      DarkIcon: DarkWrite,
+      label: "게시글 작성",
     },
     { id: "mypage", Icon: Mypage, DarkIcon: DarkMypage, label: "미이페이지" },
   ];
@@ -137,7 +139,7 @@ const WrapNavigation = styled.div`
   right: 0;
   display: flex;
   width: 100%;
-  max-width: 420px;
+  max-width: 600px;
   height: 70px;
   flex-direction: row;
   justify-content: center;
@@ -146,11 +148,14 @@ const WrapNavigation = styled.div`
   border-top: 2px solid #ffc700;
   background: #fff;
   margin: 0 auto;
-  z-index: 100;
+  z-index: 1000;
   .icon {
     flex: 1;
     text-align: center;
     cursor: pointer;
+  }
+  @media (min-width: 600px) {
+    display: none;
   }
 `;
 
