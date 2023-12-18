@@ -13,12 +13,14 @@ const SquareButton = ({
   bgColor,
   borderColor,
   margin,
+  onClick,
 }: {
   text: string;
   color?: string;
   bgColor?: string;
   borderColor?: string;
   margin?: string;
+  onClick?: () => void;
 }) => {
   return (
     <Button
@@ -26,6 +28,7 @@ const SquareButton = ({
       color={color}
       bgColor={bgColor}
       borderColor={borderColor}
+      onClick={onClick}
     >
       {text}
     </Button>
