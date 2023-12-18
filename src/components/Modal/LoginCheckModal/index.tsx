@@ -3,9 +3,9 @@ import { useRouter } from "next/router";
 import styled from "styled-components";
 
 const LoginCheckModal = ({
-  setOpen,
+  setIsOpen,
 }: {
-  setOpen: (value: boolean) => void;
+  setIsOpen: (value: boolean) => void;
 }) => {
   const { push } = useRouter();
 
@@ -13,7 +13,7 @@ const LoginCheckModal = ({
     <>
       <DimOverlay
         onClick={() => {
-          setOpen(false);
+          setIsOpen(false);
         }}
       />
       <LoginModal>
@@ -23,10 +23,10 @@ const LoginCheckModal = ({
           로그인 페이지로 이동할까요?
         </Title>
         <ModalBottomButton
-          setOpen={setOpen}
+          setIsOpen={setIsOpen}
           okLabel="로그인"
           cancelLabel="닫기"
-          movePath="/login"
+          moveOkPath="/login"
         />
       </LoginModal>
     </>
@@ -60,8 +60,8 @@ const DimOverlay = styled.div`
   left: 50%;
   transform: translate(-50%, -50%);
   width: 100%;
-  min-width: 360px; /* 최소 너비를 360px로 설정 */
-  max-width: 420px; /* 최대 너비를 420px로 설정 */
+  // min-width: 360px; /* 최소 너비를 360px로 설정 */
+  // max-width: 420px; /* 최대 너비를 420px로 설정 */
   height: 100vh;
   background-color: rgba(0, 0, 0, 0.3); /* Adjust the opacity as needed */
   z-index: 998; /* Place it below the modal */
