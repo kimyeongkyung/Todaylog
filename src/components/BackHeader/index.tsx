@@ -4,13 +4,14 @@ import { ArrowLeft } from "../icons";
 import { useRouter } from "next/router";
 
 const BackHeader = ({ title }: { title: string }) => {
-  const { push } = useRouter();
+  const { push, back } = useRouter();
 
   return (
     <>
       <Back
         onClick={() => {
-          push("/");
+          // push("/");
+          back();
         }}
       >
         <ArrowLeft />
