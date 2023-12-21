@@ -10,7 +10,7 @@ import Search from "./Search";
 import SmallHeart from "./SmallHeart";
 import Checkbox from "./Checkbox";
 import UnCheckbox from "./UnCheckbox";
-import LogoMobile from "./LogoMobile";
+import Logo from "./Logo";
 import FloatingButton from "./FloatingButton";
 import DarkCommunity from "./DarkCommuity";
 import Community from "./Community";
@@ -37,10 +37,29 @@ import Food from "./Food";
 import Cafe from "./Cafe";
 import Hobby from "./Hobby";
 import CopyAddress from "./CopyAddress";
+import DoubleNextPage from "./DoubleNextPage";
+import NextPage from "./NextPage";
+import PrevPage from "./PrevPage";
+import DoublePrevPage from "./DoublePrevPage";
+import PrevChapter from "./PrevChapter";
+import NextChapter from "./NextChapter";
+import PercentBar from "./PercentBar";
+import EmptyPercentBar from "./EmptyPercentBar";
+import Camera from "./Camera";
+import Reset from "./Reset";
 
 export {
+  Camera,
   Phone,
+  PercentBar,
+  EmptyPercentBar,
   CopyAddress,
+  PrevChapter,
+  NextChapter,
+  PrevPage,
+  DoublePrevPage,
+  DoubleNextPage,
+  NextPage,
   HashTag,
   Duck,
   Food,
@@ -67,7 +86,7 @@ export {
   SmallHeart,
   Checkbox,
   UnCheckbox,
-  LogoMobile,
+  Logo,
   FloatingButton,
   DarkCommunity,
   Community,
@@ -77,4 +96,5 @@ export {
   Sorting,
   BookmarkOn,
   MorePhoto,
+  Reset,
 };

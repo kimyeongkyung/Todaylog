@@ -1,4 +1,4 @@
-import Reacts from "react";
+import React from "react";
 
 const RemoveTag = () => {
   return (

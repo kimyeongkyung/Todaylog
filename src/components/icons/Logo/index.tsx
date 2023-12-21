@@ -1,6 +1,6 @@
 import React from "react";
 
-const LogoMobile = () => {
+const Logo = () => {
   return (
     <svg
       width="77"
@@ -28,4 +28,4 @@ const LogoMobile = () => {
     </svg>
   );
 };
-export default LogoMobile;
+export default Logo;
