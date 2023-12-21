@@ -1,5 +1,7 @@
+import BackHeader from "@/components/BackHeader";
+import Container from "@/components/Container";
 import Header from "@/components/Header";
-import Navigation from "@/components/Navigation";
+import Input from "@/components/Input";
 import { Duck, ShowEyes } from "@/components/icons";
 import Image from "next/image";
 import { useRouter } from "next/router";
@@ -12,92 +14,79 @@ const Signup = () => {
 
   return (
     <>
-      <Header />
       <Container>
-        <h1>회원가입 페이지입니다</h1>
-        <label style={{ fontSize: "12px" }}>닉네임</label>
-        <div className="checkInput">
-          <Input type="text" id="nickname"></Input>
-          <CheckBtn>중복확인</CheckBtn>
-        </div>
-        <div>
-          <label style={{ fontSize: "12px" }}>아이디(이메일)</label>
-          <Input type="email" id="id"></Input>
-        </div>
-        <div>
-          <label style={{ fontSize: "12px" }}>비밀번호</label>
-          <Input type="passsword" id="pw"></Input>
-        </div>
-        <div>
-          <label style={{ fontSize: "12px" }}>비밀번호 확인</label>
-          <Input
-            type={visiblePassword ? "text" : "password"}
-            id="pwCheck"
-          ></Input>
-          <div
-            className="show"
-            onClick={() => {
-              setVisiblePassword(!visiblePassword);
-            }}
-          >
-            <ShowEyes />
+        <WrapCon>
+          <div>
+            <BackHeader title="회원가입" />
           </div>
-        </div>
+          <div>
+            <label style={{ fontSize: "12px" }}>닉네임</label>
+            <Nickname>
+              <Input type="text" id="nickname"></Input>
+              <CheckBtn>중복확인</CheckBtn>
+            </Nickname>
+          </div>
+          <div>
+            <label style={{ fontSize: "12px" }}>아이디(이메일)</label>
+            <Input type="email" id="id"></Input>
+          </div>
+          <WrapPassword>
+            <label style={{ fontSize: "12px" }}>비밀번호</label>
+            <Input type="passsword" id="pw"></Input>
+            <div
+              className="show"
+              onClick={() => {
+                setVisiblePassword(!visiblePassword);
+              }}
+            >
+              <ShowEyes />
+            </div>
+          </WrapPassword>
+          <div>
+            <label style={{ fontSize: "12px" }}>비밀번호 확인</label>
+            <Input
+              type={visiblePassword ? "text" : "password"}
+              id="pwCheck"
+            ></Input>
+          </div>
+        </WrapCon>
       </Container>
-      <Navigation />
     </>
   );
 };
 
 export default Signup;
 
-const Container = styled.div`
-  //   display: flex;
-  min-height: 100vh;
-  //   flex-direction: column;
-  //   justify-content: space-between;
-  padding: 16px;
-  // 네비게이션 영역 확보
-  margin-bottom: 50px;
-  > div {
-    padding-bottom: 22px;
-  }
-  div:nth-of-type(4) {
-    position: relative;
-    .show {
-      cursor: pointer;
-      position: absolute;
-      top: 30px;
-      right: 10px;
-    }
-  }
-  h1 {
-    font-weight: bold;
-    padding: 8px 0 38px 0;
-  }
-  .checkInput {
-    display: flex;
-  }
+const WrapCon = styled.div`
+  max-width: 500px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
 `;
-
-const Input = styled.input`
-  border: 1px solid #ffc700;
-  width: 100%;
-  height: 38px;
-  border-radius: 5px;
-  margin-top: 5px;
+const Nickname = styled.div`
+  display: flex;
+  gap: 10px;
+`;
+const WrapPassword = styled.div`
+  position: relative;
+  .show {
+    cursor: pointer;
+    position: absolute;
+    top: 30px;
+    right: 10px;
+  }
 `;
 const CheckBtn = styled.div`
   min-width: 68px;
-  height: 38px;
+  height: 48px;
   background-color: #ffc700;
   border-radius: 5px;
   text-align: center;
-  line-height: 38px;
+  line-height: 48px;
   color: #fff;
   font-size: 14px;
   cursor: pointer;
-  margin: 5px 0 0 10px;
 `;
 
 const LostPassword = styled.div`

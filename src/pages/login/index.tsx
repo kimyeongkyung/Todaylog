@@ -1,5 +1,7 @@
+import BackHeader from "@/components/BackHeader";
+import Container from "@/components/Container";
 import Header from "@/components/Header";
-import Navigation from "@/components/Navigation";
+import Input from "@/components/Input";
 import { Duck } from "@/components/icons";
 import Image from "next/image";
 import { useRouter } from "next/router";
@@ -10,69 +12,63 @@ const Login = () => {
 
   return (
     <>
-      <Header />
       <Container>
-        <h1>로그인</h1>
-        <div>
-          <label style={{ fontSize: "12px" }}>아이디(이메일)</label>
-          <Input type="text" id="id"></Input>
-        </div>
-        <div>
-          <label style={{ fontSize: "12px" }}>비밀번호</label>
-          <Input type="text" id="id"></Input>
-        </div>
-        <LostPassword>
-          비밀번호를 잊어버리셨나요?<span>비밀번호 찾기</span>
-        </LostPassword>
-        <WrapSocial>
-          <div className="kakao">카카오로 계속하기</div>
-          <div className="naver">네이버로 계속하기</div>
-          <div className="google">구글로 계속하기</div>
-          <Line></Line>
-          <p>소셜 계정이 없으신가요?</p>
-          <div
-            className="signup"
-            onClick={() => {
-              push("/signup");
-            }}
-          >
-            회원가입
+        <WrapCon>
+          <div>
+            <BackHeader title="로그인" />
           </div>
-        </WrapSocial>
+          <WrapLogin>
+            <div>
+              <label style={{ fontSize: "12px" }}>아이디(이메일)</label>
+              <Input type="text" id="id"></Input>
+            </div>
+            <div>
+              <label style={{ fontSize: "12px" }}>비밀번호</label>
+              <Input type="text" id="id"></Input>
+            </div>
+            <LostPassword>
+              비밀번호를 잊어버리셨나요?<span>비밀번호 찾기</span>
+            </LostPassword>
+          </WrapLogin>
+
+          <WrapSocial>
+            <div className="kakao">카카오로 계속하기</div>
+            <div className="naver">네이버로 계속하기</div>
+            <div className="google">구글로 계속하기</div>
+            <Line></Line>
+            <p>소셜 계정이 없으신가요?</p>
+            <div
+              className="signup"
+              onClick={() => {
+                push("/signup");
+              }}
+            >
+              회원가입
+            </div>
+          </WrapSocial>
+        </WrapCon>
       </Container>
-      <Navigation />
     </>
   );
 };
 
 export default Login;
 
-const Container = styled.div`
-  //   display: flex;
-  min-height: 100vh;
-  //   flex-direction: column;
-  //   justify-content: space-between;
-  padding: 16px;
-  // 네비게이션 영역 확보
-  margin-bottom: 50px;
-  h1 {
-    font-weight: bold;
-    padding: 8px 0 38px 0;
-  }
+const WrapCon = styled.div`
+  max-width: 500px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
 `;
-
-const Input = styled.input`
-  border: 1px solid #ffc700;
-  width: 100%;
-  height: 38px;
-  border-radius: 5px;
-  margin-top: 8px;
+const WrapLogin = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
 `;
-
 const LostPassword = styled.div`
   font-size: 12px;
   color: #bcbcbc;
-  padding: 16px 0 32px 0;
   span {
     padding-left: 4px;
     text-decoration: underline;
