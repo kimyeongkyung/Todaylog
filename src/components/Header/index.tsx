@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { Duck, LogoMobile, Mypage, Write } from "../icons";
+import { Duck, Logo, Mypage, Write } from "../icons";
 import { useRouter } from "next/router";
 import { useState } from "react";
 import LoginCheckModal from "../Modal/LoginCheckModal";
@@ -17,53 +17,81 @@ const Header = () => {
               push("/");
             }}
           >
-            <LogoMobile />
+            <Logo />
           </WrapLogo>
-          <WrapTab>
-            <div
-              style={{ fontWeight: pathname === "/where" ? "bold" : "normal" }}
-              onClick={() => {
-                push("/where");
-              }}
-            >
-              어디가지
-            </div>
-            <div
-              style={{ fontWeight: pathname === "/what" ? "bold" : "normal" }}
-              onClick={() => {
-                push("/what");
-              }}
-            >
-              오늘 뭐하지
-            </div>
-          </WrapTab>
-        </WrapHeader>
-        {/* mobile */}
-        <LoginBtn
-          onClick={() => {
-            setIsOpen(true);
-            // push("/login");
-          }}
-        >
-          로그인
-        </LoginBtn>
-        {/* PC */}
-        <PCWrapRightCon>
-          <PCWriteBtn>
-            <Write width="20px" height="20px" />
-            <div className="text">글쓰기</div>
-          </PCWriteBtn>
-          <PCLoginBtn
+          {/* mobile */}
+          <LoginBtn
             onClick={() => {
-              setIsOpen(true);
-              // push("/login");
+              // setIsOpen(true);
+              push("/mypage");
             }}
           >
-            <Mypage width="20px" height="20px" />
-            <div className="text">로그인</div>
-          </PCLoginBtn>
-        </PCWrapRightCon>
-        {/* <WrapProfile>
+            로그인
+          </LoginBtn>
+          <WrapCon>
+            <WrapTab>
+              <div
+                style={{
+                  fontWeight:
+                    pathname === "/" || pathname === "/where"
+                      ? "bold"
+                      : "normal",
+                }}
+                onClick={() => {
+                  push("/where");
+                }}
+              >
+                어디가지
+              </div>
+              <div
+                style={{
+                  fontWeight: pathname === "/what" ? "bold" : "normal",
+                }}
+                onClick={() => {
+                  push("/what");
+                }}
+              >
+                오늘 뭐하지
+              </div>
+              <div
+                style={{
+                  fontWeight: pathname === "/notice" ? "bold" : "normal",
+                }}
+                onClick={() => {
+                  push("/notice");
+                }}
+              >
+                공지사항
+              </div>
+            </WrapTab>
+
+            {/* PC */}
+            <PCWrapRightCon>
+              <PCWriteBtn
+                onClick={() => {
+                  // setIsOpen(true);
+                  push("/write");
+                }}
+              >
+                <div className="icon">
+                  <Write width="20px" height="20px" />
+                </div>
+                <div className="text">글쓰기</div>
+              </PCWriteBtn>
+              <PCLoginBtn
+                onClick={() => {
+                  // setIsOpen(true);
+                  push("/mypage");
+                }}
+              >
+                <div className="icon">
+                  <Mypage width="20px" height="20px" />
+                </div>
+                <div className="text">로그인</div>
+              </PCLoginBtn>
+            </PCWrapRightCon>
+          </WrapCon>
+          {/* <WrapProfile>
         <ProfileImg>
           <Duck />
         </ProfileImg>
@@ -73,6 +101,7 @@ const Header = () => {
           나무늘보
         </div>
       </WrapProfile> */}
+        </WrapHeader>
       </Container>
       {isOpen && (
         <LoginCheckModal
@@ -95,21 +124,23 @@ const Container = styled.div`
   box-sizing: border-box;
   width: 100%;
   min-width: 360px;
-  margin: 0 auto;
+  /* margin: 0 auto; */
   height: 52px;
   @media (min-width: 600px) {
     width: 100%; /* 너비를 100%로 설정하여 부모 요소의 크기에 따라 변화 */
     min-width: none; /* 최대 너비를 제거하여 더 이상 제한하지 않음 */
     margin-left: 0; /* 왼쪽 마진을 0으로 설정 */
-    background: #fff;
-    border-bottom: 2px solid #ffc700;
+    background: #fff5df;
   }
+  display: flex;
 `;
 
 const WrapHeader = styled.div`
-  position: relative;
+  width: 100%;
   display: flex;
-  gap: 20px;
+  gap: 30px;
+  flex-direction: row;
+  align-items: center;
 `;
 const WrapTab = styled.div`
   font-size: 13px;
@@ -122,46 +153,37 @@ const WrapTab = styled.div`
   }
 `;
 const WrapLogo = styled.div`
-  padding-top: 11px;
-  line-height: 30px;
-  cursor: pointer;
-  @media (max-width: 600px) {
-    margin: auto;
-  }
-`;
-
-const ProfileImg = styled.div`
-  width: 30px;
-  height: 30px;
-  border-radius: 15px;
-  background-color: #fff;
-`;
-const PCWrapRightCon = styled.div`
   display: flex;
+  margin: auto;
   cursor: pointer;
-  gap: 25px;
-  position: absolute;
-  top: 14px;
-  right: 16px;
 `;
-const PCWriteBtn = styled.div`
+const WrapCon = styled.div`
   display: flex;
-  .text {
-    padding-left: 7px;
-    font-size: 11px;
-    line-height: 20px;
-  }
+  width: 100%;
+  justify-content: space-between;
   @media (max-width: 600px) {
     display: none;
   }
 `;
+
+const PCWrapRightCon = styled.div`
+  display: flex;
+  cursor: pointer;
+  gap: 25px;
+`;
+const PCWriteBtn = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  font-size: 11px;
+  gap: 6px;
+`;
 const PCLoginBtn = styled.div`
   display: flex;
-  .text {
-    padding-left: 7px;
-    font-size: 11px;
-    line-height: 20px;
-  }
+  flex-direction: row;
+  align-items: center;
+  font-size: 11px;
+  gap: 6px;
   @media (max-width: 600px) {
     display: none;
   }
@@ -182,8 +204,4 @@ const LoginBtn = styled.div`
   @media (min-width: 600px) {
     display: none;
   }
-`;
-
-const WrapProfile = styled.div`
-  display: flex;
 `;
