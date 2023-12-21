@@ -8,31 +8,40 @@ const BackHeader = ({ title }: { title: string }) => {
 
   return (
     <>
-      <Back
-        onClick={() => {
-          // push("/");
-          back();
-        }}
-      >
-        <ArrowLeft />
-      </Back>
-      <Title>{title}</Title>
+      <Container>
+        <Back
+          onClick={() => {
+            // push("/");
+            back();
+          }}
+        >
+          <ArrowLeft />
+        </Back>
+        <Title>{title}</Title>
+      </Container>
     </>
   );
 };
 
 export default BackHeader;
-
+const Container = styled.div`
+  /* position: relative; */
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+`;
 const Back = styled.div`
-  position: absolute;
+  /* position: absolute;
   top: 16px;
-  left: 16px;
+  left: 16px; */
   cursor: pointer;
 `;
 const Title = styled.div`
-  width: 100%;
   font-size: 16px;
-  padding: 0 0 16px 0;
+  /* padding: 0 0 16px 0; */
   font-weight: bold;
-  text-align: center;
+  margin: 0 auto;
+  /* 아이콘 영역만큼 오른쪽으로 다시 밀기 */
+  padding-right: 19px;
 `;
