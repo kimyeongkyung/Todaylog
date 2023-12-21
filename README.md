@@ -1,6 +1,6 @@
 # Todaylog(일과 공유 및 장소 추천 서비스)
 
-## 🔎 로고
+## 📌 로고
 ![logo_mobile](https://github.com/kimyeongkyung/Todaylog/assets/100064057/3fd4ffb1-58f4-4d23-8c17-82c9752ba927)
 
 
