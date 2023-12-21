@@ -13,6 +13,7 @@
 
 ## 🔨 기술 스택
 프론트엔드 : Next.js, Typescript
+
 백엔드 : node.js, sqlite
 
 
