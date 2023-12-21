@@ -4,13 +4,13 @@ import { useRouter } from "next/router";
 import React from "react";
 import styled from "styled-components";
 
-const MyPost = () => {
+const Question = () => {
   const { push } = useRouter();
 
   return (
     <Container>
       <WrapMobile>
-        <BackHeader title="내가 쓴 게시글" />
+        <BackHeader title="문의하기" />
       </WrapMobile>
       {/* PC */}
       <WrapPC>
@@ -24,7 +24,6 @@ const MyPost = () => {
             회원정보 수정
           </div>
           <div
-            className="clicked"
             onClick={() => {
               push("/mypage/mypost");
             }}
@@ -39,6 +38,7 @@ const MyPost = () => {
             북마크
           </div>
           <div
+            className="clicked"
             onClick={() => {
               push("/mypage/question");
             }}
@@ -48,7 +48,7 @@ const MyPost = () => {
           <div>로그아웃</div>
         </WrapTab>
         <WrapContents>
-          <Chapter>내가 쓴 게시글</Chapter>
+          <Chapter>문의하기</Chapter>
           <Information></Information>
         </WrapContents>
       </WrapPC>
@@ -56,7 +56,7 @@ const MyPost = () => {
   );
 };
 
-export default MyPost;
+export default Question;
 
 const WrapMobile = styled.div`
   @media (min-width: 600px) {
