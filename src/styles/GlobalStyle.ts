@@ -34,13 +34,23 @@ ${reset}
     background-color: #ffffff;
     margin: 0 auto;
     min-height: 100vh;
+    // 공통 스타일 (모바일)
+    @media (max-width: 600px) {
+      // 모바일 화면 스타일
     min-width: 360px;
-    max-width: 420px;
+    // max-width: 420px;
   }
+
+  }
+
 
   #__portal {
     margin: 0 auto;
+    // 공통 스타일 (모바일)
+    @media (max-width: 600px) {
+      // 모바일 화면 스타일
     max-width: 420px;
+  }
   }
 
   html {
@@ -64,9 +74,9 @@ ${reset}
     background-color: #ddd;
     // letter-spacing: -0.3px;
 
-    @media only screen and (max-width: 420px) {
-      background-color: #ffffff;
-    }
+    // @media only screen and (max-width: 420px) {
+    //   background-color: #ffffff;
+    // }
   }
 
   a {
