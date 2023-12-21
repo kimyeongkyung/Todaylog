@@ -327,7 +327,16 @@ const WhatDetailImg = styled.div`
     border-left: none;
   }
   @media (max-width: 600px) {
-    display: none;
+    img {
+      width: 100%;
+      object-fit: cover;
+    }
+    img:nth-of-type(2) {
+      display: none;
+    }
+    img:nth-of-type(3) {
+      display: none;
+    }
   }
 `;
 

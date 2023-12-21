@@ -321,7 +321,11 @@ const What = () => {
         </WrapPCCon>
 
         <MobileCardList>
-          <ReviewCard>
+          <ReviewCard
+            onClick={() => {
+              push("/what/1");
+            }}
+          >
             <Title>[하루일기] 어노브 연남 | 목화씨 라운지 | 망원한강공원</Title>
             <ReviewImg>
               <img src="/images/sample1.png"></img>
@@ -332,7 +336,11 @@ const What = () => {
               <span>합정동 근처</span>에서 하루를 보냈어요.
             </ReviewLocation>
           </ReviewCard>
-          <ReviewCard>
+          <ReviewCard
+            onClick={() => {
+              push("/what/1");
+            }}
+          >
             <Title>[하루일기] 어노브 연남 | 목화씨 라운지 | 망원한강공원</Title>
             <ReviewImg>
               <img src="/images/sample1.png"></img>
@@ -343,7 +351,11 @@ const What = () => {
               <span>합정동 근처</span>에서 하루를 보냈어요.
             </ReviewLocation>
           </ReviewCard>
-          <ReviewCard>
+          <ReviewCard
+            onClick={() => {
+              push("/what/1");
+            }}
+          >
             <Title>[하루일기] 어노브 연남 | 목화씨 라운지 | 망원한강공원</Title>
             <ReviewImg>
               <img src="/images/sample1.png"></img>
@@ -458,7 +470,6 @@ const ReviewImg = styled.div`
 
   img {
     width: calc(33.33%);
-
     border-left: 1px solid #000;
     box-sizing: border-box;
     aspect-ratio: 1;
