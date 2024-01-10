@@ -1,19 +1,19 @@
-import { FirstPlace, LastPlace, SecondPlace, TitleWrite } from "../components";
+// import { FirstPlace, LastPlace, SecondPlace, TitleWrite } from "../components";
 
-const TitleForm = () => {
-  return <TitleWrite />;
-};
+// const TitleForm = () => {
+//   return <TitleWrite />;
+// };
 
-const FirstPlaceForm = () => {
-  return <FirstPlace />;
-};
+// const FirstPlaceForm = () => {
+//   return <FirstPlace />;
+// };
 
-const SecondPlaceForm = () => {
-  return <SecondPlace />;
-};
+// const SecondPlaceForm = () => {
+//   return <SecondPlace />;
+// };
 
-const LastPlaceForm = () => {
-  return <LastPlace />;
-};
+// const LastPlaceForm = () => {
+//   return <LastPlace />;
+// };
 
-export { TitleForm, FirstPlaceForm, SecondPlaceForm, LastPlaceForm };
+// export { TitleForm, FirstPlaceForm, SecondPlaceForm, LastPlaceForm };
