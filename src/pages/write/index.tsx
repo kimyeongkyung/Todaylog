@@ -20,21 +20,80 @@ const WriteMain = () => {
   const [data, setData] = useState([]);
   const [isTooltipVisible, setTooltipVisible] = useState(false);
   const [step, setStep] = useState(0);
-  //이전 단계로 이동
-  const handlePrevStep = useCallback(() => {
-    setStep((prev) => prev - 1);
-  }, []);
+
   //다음 단계로 이동
   const handleNextStep = useCallback(() => {
     setStep((prev) => prev + 1);
   }, []);
 
+  const [formData, setFormData] = useState({
+    title: "",
+    placeInfo: {
+      firstPlace: {
+        keyword: [],
+        placeName: "",
+        images: [],
+        comment: "",
+        selectedHashTags: [],
+      },
+      secondPlace: {
+        keyword: [],
+        placeName: "",
+        images: [],
+        comment: "",
+        selectedHashTags: [],
+      },
+      lastPlace: {
+        keyword: [],
+        placeName: "",
+        images: [],
+        comment: "",
+        selectedHashTags: [],
+      },
+    },
+  });
+
+  console.log({ formData });
+  // const handleSetFormData = (data) => {
+  //   console.log({ data });
+  //   setFormData((prevData) => ({
+  //     ...prevData,
+  //     ...data,
+  //   }));
+  // };
+
   const methods = useForm({
-    defaultValues: {},
+    defaultValues: {
+      title: "",
+      placeInfo: {
+        firstPlace: {
+          keyword: [],
+          placeName: "",
+          images: [],
+          comment: "",
+          selectedHashTags: [],
+        },
+        secondPlace: {
+          keyword: [],
+          placeName: "",
+          images: [],
+          comment: "",
+          selectedHashTags: [],
+        },
+        lastPlace: {
+          keyword: [],
+          placeName: "",
+          images: [],
+          comment: "",
+          selectedHashTags: [],
+        },
+      },
+    },
     mode: "onChange",
     reValidateMode: "onChange",
     // resolver: yupResolver(writeTodaylogSchema[step]),
   });
+
   const formTitle = [
     "작성하기",
     "첫번 째 장소를 등록해주세요.",
@@ -49,43 +108,56 @@ const WriteMain = () => {
   const handleMouseLeave = () => {
     setTooltipVisible(false);
   };
-  console.log(data);
+
+  //이전 단계로 이동
+  const handlePrevStep = useCallback(() => {
+    setStep((prev) => prev - 1);
+  }, []);
+
+  // console.log("get", data);
   // 서버 주소 및 엔드포인트
   // const serverUrl = "http://localhost:4000";
-  // const endpoint = "/saveData";
-
+  // // const endpoint = "/posts";
+  // const [posts, setPosts] = useState([]);
   // useEffect(() => {
+  //   //오늘 뭐하지 리스트 조회
   //   // GET 요청 보내기
-  //   fetch(`${serverUrl}${endpoint}`)
-  //     .then((response) => response.text())
+  //   fetch(`${serverUrl}/what/posts`)
+  //     .then((response) => response.json())
   //     .then((data) => {
-  //       console.log("Server response:", data);
-  //       setData(data); // 받아온 데이터를 상태에 저장
+  //       console.log("Server response:", data.posts);
+  //       setData(data?.posts); // 받아온 데이터를 상태에 저장
   //     })
   //     .catch((error) => {
   //       console.error("Error during GET request:", error);
   //     });
   // }, []); // 빈 배열은 컴포넌트가 마운트될 때 한 번만 실행하도록 합니다.
 
+  // useEffect(() => {
+  //   // 게시글 조회 API 호출
+  //   fetch(`/posts?place=${place}&userNickname=${user.nickname}`)
+  //     .then((response) => response.json())
+  //     .then((data) => setPosts(data.posts))
+  //     .catch((error) => console.error("Error:", error));
+  // }, [place, user]);
+
   // const handleSendRequest = async () => {
   //   // 가상 데이터
   //   const postData = {
-  //     id: 9,
-  //     name: "testtest",
-  //     region: "seoul",
-  //     age: 22,
+  //     title: "test5",
+  //     nearby: "주교동",
+  //     images: "https://555",
   //   };
 
   //   try {
   //     // POST 요청 보내기
-  //     const response = await fetch(`${serverUrl}${endpoint}`, {
+  //     const response = await fetch(`${serverUrl}/post`, {
   //       method: "POST",
   //       headers: {
   //         "Content-Type": "application/json",
   //       },
   //       body: JSON.stringify(postData),
   //     });
-
   //     // 서버 응답 확인
   //     const data = await response.text();
   //     console.log("Server response:", data);
@@ -110,11 +182,14 @@ const WriteMain = () => {
           </Title>
           <WriteForm
             handleNextStep={handleNextStep}
+            handlePrevStep={handlePrevStep}
             step={step}
             methods={methods}
+            setFormData={setFormData}
+            formData={formData}
           />
           {/* 하단 버튼 */}
-          <WrapBtn>
+          {/* <WrapBtn>
             <button
               onClick={() => {
                 handlePrevStep();
@@ -123,7 +198,7 @@ const WriteMain = () => {
             >
               <PrevChapter />
             </button>
-            {step === 3 ? (
+          {step === 3 ? (
               <WrapLastBtn>
                 <PreviewBtn>미리보기</PreviewBtn>
                 <SaveBtn step={step}>발행</SaveBtn>
@@ -145,15 +220,17 @@ const WriteMain = () => {
                 </SaveBtn>
               </WrapLastBtn>
             )}
-          </WrapBtn>
-          {/* <div> */}
-          {/* {data.map((item) => (
-          <div key={item.id}>
-            {item.name} - {item.region} - {item.age}
-          </div>
-        ))} */}
-          {/* </div> */}
-          {/* <ButtonCustom onClick={handleSendRequest}>Send POST Request</ButtonCustom> */}
+          </WrapBtn> */}
+          {/* <div>
+            {data?.map((item) => (
+              <div key={item.postId}>
+                {item.title} - {item.nearby}
+              </div>
+            ))}
+          </div> */}
+          {/* <ButtonCustom onClick={handleSendRequest}>
+            Send POST Request
+          </ButtonCustom> */}
           <WrapGuide>
             <div className="icon">
               <Guide />

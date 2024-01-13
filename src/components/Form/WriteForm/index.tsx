@@ -22,7 +22,6 @@ const getWriteStep = (
           handleNextStep={handleNextStep}
           handlePrevStep={handlePrevStep}
           setFormData={setFormData}
-          methods={methods}
         />
       );
     case 1:
@@ -31,7 +30,6 @@ const getWriteStep = (
           handleNextStep={handleNextStep}
           handlePrevStep={handlePrevStep}
           setFormData={setFormData}
-          methods={methods}
         />
       );
     case 2:
@@ -40,7 +38,6 @@ const getWriteStep = (
           handleNextStep={handleNextStep}
           handlePrevStep={handlePrevStep}
           setFormData={setFormData}
-          methods={methods}
         />
       );
     case 3:
@@ -49,7 +46,6 @@ const getWriteStep = (
           handleNextStep={handleNextStep}
           handlePrevStep={handlePrevStep}
           setFormData={setFormData}
-          methods={methods}
         />
       );
     default:
@@ -68,6 +64,32 @@ interface Props {
     any
   >;
   step: number;
+  formData: {
+    title: "";
+    placeInfo: {
+      firstPlace: {
+        keyword: [];
+        placeName: "";
+        images: [];
+        comment: "";
+        selectedHashTags: [];
+      };
+      secondPlace: {
+        keyword: [];
+        placeName: "";
+        images: [];
+        comment: "";
+        selectedHashTags: [];
+      };
+      lastPlace: {
+        keyword: [];
+        placeName: "";
+        images: [];
+        comment: "";
+        selectedHashTags: [];
+      };
+    };
+  };
 }
 
 const WriteForm = ({
@@ -81,10 +103,8 @@ const WriteForm = ({
   const { watch } = methods;
   const handleSignUp = async () => {
     const currentStepData = watch();
-    console.log(currentStepData);
     // 현재 단계에 해당하는 placeInfo를 업데이트
-    setFormData((prevData) => {
-      console.log({ prevData });
+    setFormData((prevData: any) => {
       return {
         ...prevData,
         placeInfo: {
