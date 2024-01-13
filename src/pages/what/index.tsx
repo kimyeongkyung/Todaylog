@@ -8,6 +8,7 @@ import {
   NextPage,
   PrevPage,
 } from "@/components/icons";
+import useGetWhatPosts from "@/hooks/what/posts/useGetWhatPosts";
 import Image from "next/image";
 import { useRouter } from "next/router";
 import { useState } from "react";
@@ -16,6 +17,8 @@ import styled from "styled-components";
 const What = () => {
   const [open, setOpen] = useState(false);
   const { push } = useRouter();
+  // 오늘뭐하지 데이터 조회
+  const data = useGetWhatPosts();
 
   return (
     <>
@@ -36,266 +39,54 @@ const What = () => {
         {/* <div> */}
         <WrapPCCon>
           <PCCardList>
-            <WhatPCCard
-              onClick={() => {
-                push("/what/1");
-              }}
-            >
-              <img
-                src="/images/sample1.png"
-                alt="where-card"
-                width="140px"
-                height="140px"
-              ></img>
-              <div className="icon">
-                <MorePhoto />
-              </div>
-              <Infomation>
-                <WrapLocation>
-                  <div>
-                    <span>합정동 근처</span>에서 하루를 보냈어요
+            {data?.map((item) => {
+              const addressParts = item?.address?.split(/[\s,]+/);
+
+              // 필요한 부분만 선택
+              const shortenedAddress = addressParts?.slice(1, 3).join(" ");
+              return (
+                <WhatPCCard
+                  key={item.postId}
+                  onClick={() => {
+                    push(`/what/${item.postId}`);
+                  }}
+                >
+                  <Image
+                    src={item.images}
+                    alt="where-card"
+                    width={140}
+                    height={140}
+                    className="img"
+                  ></Image>
+                  <div className="icon">
+                    <MorePhoto />
                   </div>
-                </WrapLocation>
-                <PCTitle>
-                  [하루일기] 어노브 연남 | 목화씨라운지 | OGOC공방
-                </PCTitle>
-                <Content>
-                  아오늘잘놀았네!ㅇㄹㅁㅇㄹㅁㄴㅇㄹㅁㅇㄴㄹㄴㅇㄹㅁㄴㄹㅇㄴㄹㅁㄴㅇㄹㄴㄹㄴㅁㄹㅁㄹㅁㄴㄹㅁㄴㅇㄹㅁㄴㅇㄹㅁㄴㅇㄹㅁㄴㄹㄴㄹㄴㄹㄴㅁㄹㄴㅁㅇㄹㅁㅇㄹㅁㄴㅇㄹㅁㅇㄴㄹㄴㅇㄹㅁㄴㄹㅇㄴㄹㅁㄴㅇㄹㄴㄹㄴㅁㄹㅁㄹㅁㄴㄹㅁㄴㅇㄹㅁㄴㅇㄹㅁㄴㅇㄹㅁㄴㄹㄴㄹㄴㄹㄴㅁㄹㄴㅁㄹㄴㅇㄹㄴㄹㄴㅇㄹㄴㅇㄹㄴㄹㄴㅇㅇㄹㅁㅇㄹㅁㄴㅇㄹㅁㅇㄴㄹㄴㅇㄹㅁㄴㄹㅇㄴㄹㅁㄴㅇㄹㄴㄹㄴㅁㄹㅁㄹㅁㄴㄹㅁㄴㅇㄹㅁㄴㅇㄹㅁㄴㅇㄹㅁㄴㄹㄴㄹㄴㄹㄴㅁㄹㄴㅁㄹㄴㅇㄹㄴㄹㄴㅇ
-                </Content>
-                <WrapWriteInfo>
-                  <Writer>
-                    <div className="profileImg">
-                      <img src="/images/sample5.png" alt="profile"></img>
-                    </div>
-                    나무늘보
-                  </Writer>
-                  <CreatedAt>2023.10.10</CreatedAt>
-                </WrapWriteInfo>
-              </Infomation>
-            </WhatPCCard>{" "}
-            <WhatPCCard
-              onClick={() => {
-                push("/what/1");
-              }}
-            >
-              <img
-                src="/images/sample1.png"
-                alt="where-card"
-                width="140px"
-                height="140px"
-              ></img>
-              <div className="icon">
-                <MorePhoto />
-              </div>
-              <Infomation>
-                <WrapLocation>
-                  <div>
-                    <span>합정동 근처</span>에서 하루를 보냈어요
-                  </div>
-                </WrapLocation>
-                <PCTitle>
-                  [하루일기] 어노브 연남 | 목화씨라운지 | OGOC공방
-                </PCTitle>
-                <Content>
-                  아오늘잘놀았네!ㅇㄹㅁㅇㄹㅁㄴㅇㄹㅁㅇㄴㄹㄴㅇㄹㅁㄴㄹㅇㄴㄹㅁㄴㅇㄹㄴㄹㄴㅁㄹㅁㄹㅁㄴㄹㅁㄴㅇㄹㅁㄴㅇㄹㅁㄴㅇㄹㅁㄴㄹㄴㄹㄴㄹㄴㅁㄹㄴㅁㅇㄹㅁㅇㄹㅁㄴㅇㄹㅁㅇㄴㄹㄴㅇㄹㅁㄴㄹㅇㄴㄹㅁㄴㅇㄹㄴㄹㄴㅁㄹㅁㄹㅁㄴㄹㅁㄴㅇㄹㅁㄴㅇㄹㅁㄴㅇㄹㅁㄴㄹㄴㄹㄴㄹㄴㅁㄹㄴㅁㄹㄴㅇㄹㄴㄹㄴㅇㄹㄴㅇㄹㄴㄹㄴㅇㅇㄹㅁㅇㄹㅁㄴㅇㄹㅁㅇㄴㄹㄴㅇㄹㅁㄴㄹㅇㄴㄹㅁㄴㅇㄹㄴㄹㄴㅁㄹㅁㄹㅁㄴㄹㅁㄴㅇㄹㅁㄴㅇㄹㅁㄴㅇㄹㅁㄴㄹㄴㄹㄴㄹㄴㅁㄹㄴㅁㄹㄴㅇㄹㄴㄹㄴㅇ
-                </Content>
-                <WrapWriteInfo>
-                  <Writer>
-                    <div className="profileImg">
-                      <img src="/images/sample5.png" alt="profile"></img>
-                    </div>
-                    나무늘보
-                  </Writer>
-                  <CreatedAt>2023.10.10</CreatedAt>
-                </WrapWriteInfo>
-              </Infomation>
-            </WhatPCCard>
-            <WhatPCCard
-              onClick={() => {
-                push("/what/1");
-              }}
-            >
-              <img
-                src="/images/sample1.png"
-                alt="where-card"
-                width="140px"
-                height="140px"
-              ></img>
-              <div className="icon">
-                <MorePhoto />
-              </div>
-              <Infomation>
-                <WrapLocation>
-                  <div>
-                    <span>합정동 근처</span>에서 하루를 보냈어요
-                  </div>
-                </WrapLocation>
-                <PCTitle>
-                  [하루일기] 어노브 연남 | 목화씨라운지 | OGOC공방
-                </PCTitle>
-                <Content>
-                  아오늘잘놀았네!ㅇㄹㅁㅇㄹㅁㄴㅇㄹㅁㅇㄴㄹㄴㅇㄹㅁㄴㄹㅇㄴㄹㅁㄴㅇㄹㄴㄹㄴㅁㄹㅁㄹㅁㄴㄹㅁㄴㅇㄹㅁㄴㅇㄹㅁㄴㅇㄹㅁㄴㄹㄴㄹㄴㄹㄴㅁㄹㄴㅁㅇㄹㅁㅇㄹㅁㄴㅇㄹㅁㅇㄴㄹㄴㅇㄹㅁㄴㄹㅇㄴㄹㅁㄴㅇㄹㄴㄹㄴㅁㄹㅁㄹㅁㄴㄹㅁㄴㅇㄹㅁㄴㅇㄹㅁㄴㅇㄹㅁㄴㄹㄴㄹㄴㄹㄴㅁㄹㄴㅁㄹㄴㅇㄹㄴㄹㄴㅇㄹㄴㅇㄹㄴㄹㄴㅇㅇㄹㅁㅇㄹㅁㄴㅇㄹㅁㅇㄴㄹㄴㅇㄹㅁㄴㄹㅇㄴㄹㅁㄴㅇㄹㄴㄹㄴㅁㄹㅁㄹㅁㄴㄹㅁㄴㅇㄹㅁㄴㅇㄹㅁㄴㅇㄹㅁㄴㄹㄴㄹㄴㄹㄴㅁㄹㄴㅁㄹㄴㅇㄹㄴㄹㄴㅇ
-                </Content>
-                <WrapWriteInfo>
-                  <Writer>
-                    <div className="profileImg">
-                      <img src="/images/sample5.png" alt="profile"></img>
-                    </div>
-                    나무늘보
-                  </Writer>
-                  <CreatedAt>2023.10.10</CreatedAt>
-                </WrapWriteInfo>
-              </Infomation>
-            </WhatPCCard>
-            <WhatPCCard
-              onClick={() => {
-                push("/what/1");
-              }}
-            >
-              <img
-                src="/images/sample1.png"
-                alt="where-card"
-                width="140px"
-                height="140px"
-              ></img>
-              <div className="icon">
-                <MorePhoto />
-              </div>
-              <Infomation>
-                <WrapLocation>
-                  <div>
-                    <span>합정동 근처</span>에서 하루를 보냈어요
-                  </div>
-                </WrapLocation>
-                <PCTitle>
-                  [하루일기] 어노브 연남 | 목화씨라운지 | OGOC공방
-                </PCTitle>
-                <Content>
-                  아오늘잘놀았네!ㅇㄹㅁㅇㄹㅁㄴㅇㄹㅁㅇㄴㄹㄴㅇㄹㅁㄴㄹㅇㄴㄹㅁㄴㅇㄹㄴㄹㄴㅁㄹㅁㄹㅁㄴㄹㅁㄴㅇㄹㅁㄴㅇㄹㅁㄴㅇㄹㅁㄴㄹㄴㄹㄴㄹㄴㅁㄹㄴㅁㅇㄹㅁㅇㄹㅁㄴㅇㄹㅁㅇㄴㄹㄴㅇㄹㅁㄴㄹㅇㄴㄹㅁㄴㅇㄹㄴㄹㄴㅁㄹㅁㄹㅁㄴㄹㅁㄴㅇㄹㅁㄴㅇㄹㅁㄴㅇㄹㅁㄴㄹㄴㄹㄴㄹㄴㅁㄹㄴㅁㄹㄴㅇㄹㄴㄹㄴㅇㄹㄴㅇㄹㄴㄹㄴㅇㅇㄹㅁㅇㄹㅁㄴㅇㄹㅁㅇㄴㄹㄴㅇㄹㅁㄴㄹㅇㄴㄹㅁㄴㅇㄹㄴㄹㄴㅁㄹㅁㄹㅁㄴㄹㅁㄴㅇㄹㅁㄴㅇㄹㅁㄴㅇㄹㅁㄴㄹㄴㄹㄴㄹㄴㅁㄹㄴㅁㄹㄴㅇㄹㄴㄹㄴㅇ
-                </Content>
-                <WrapWriteInfo>
-                  <Writer>
-                    <div className="profileImg">
-                      <img src="/images/sample5.png" alt="profile"></img>
-                    </div>
-                    나무늘보
-                  </Writer>
-                  <CreatedAt>2023.10.10</CreatedAt>
-                </WrapWriteInfo>
-              </Infomation>
-            </WhatPCCard>
-            <WhatPCCard
-              onClick={() => {
-                push("/what/1");
-              }}
-            >
-              <img
-                src="/images/sample1.png"
-                alt="where-card"
-                width="140px"
-                height="140px"
-              ></img>
-              <div className="icon">
-                <MorePhoto />
-              </div>
-              <Infomation>
-                <WrapLocation>
-                  <div>
-                    <span>합정동 근처</span>에서 하루를 보냈어요
-                  </div>
-                </WrapLocation>
-                <PCTitle>
-                  [하루일기] 어노브 연남 | 목화씨라운지 | OGOC공방
-                </PCTitle>
-                <Content>
-                  아오늘잘놀았네!ㅇㄹㅁㅇㄹㅁㄴㅇㄹㅁㅇㄴㄹㄴㅇㄹㅁㄴㄹㅇㄴㄹㅁㄴㅇㄹㄴㄹㄴㅁㄹㅁㄹㅁㄴㄹㅁㄴㅇㄹㅁㄴㅇㄹㅁㄴㅇㄹㅁㄴㄹㄴㄹㄴㄹㄴㅁㄹㄴㅁㅇㄹㅁㅇㄹㅁㄴㅇㄹㅁㅇㄴㄹㄴㅇㄹㅁㄴㄹㅇㄴㄹㅁㄴㅇㄹㄴㄹㄴㅁㄹㅁㄹㅁㄴㄹㅁㄴㅇㄹㅁㄴㅇㄹㅁㄴㅇㄹㅁㄴㄹㄴㄹㄴㄹㄴㅁㄹㄴㅁㄹㄴㅇㄹㄴㄹㄴㅇㄹㄴㅇㄹㄴㄹㄴㅇㅇㄹㅁㅇㄹㅁㄴㅇㄹㅁㅇㄴㄹㄴㅇㄹㅁㄴㄹㅇㄴㄹㅁㄴㅇㄹㄴㄹㄴㅁㄹㅁㄹㅁㄴㄹㅁㄴㅇㄹㅁㄴㅇㄹㅁㄴㅇㄹㅁㄴㄹㄴㄹㄴㄹㄴㅁㄹㄴㅁㄹㄴㅇㄹㄴㄹㄴㅇ
-                </Content>
-                <WrapWriteInfo>
-                  <Writer>
-                    <div className="profileImg">
-                      <img src="/images/sample5.png" alt="profile"></img>
-                    </div>
-                    나무늘보
-                  </Writer>
-                  <CreatedAt>2023.10.10</CreatedAt>
-                </WrapWriteInfo>
-              </Infomation>
-            </WhatPCCard>
-            <WhatPCCard
-              onClick={() => {
-                push("/what/1");
-              }}
-            >
-              <img
-                src="/images/sample1.png"
-                alt="where-card"
-                width="140px"
-                height="140px"
-              ></img>
-              <div className="icon">
-                <MorePhoto />
-              </div>
-              <Infomation>
-                <WrapLocation>
-                  <div>
-                    <span>합정동 근처</span>에서 하루를 보냈어요
-                  </div>
-                </WrapLocation>
-                <PCTitle>
-                  [하루일기] 어노브 연남 | 목화씨라운지 | OGOC공방
-                </PCTitle>
-                <Content>
-                  아오늘잘놀았네!ㅇㄹㅁㅇㄹㅁㄴㅇㄹㅁㅇㄴㄹㄴㅇㄹㅁㄴㄹㅇㄴㄹㅁㄴㅇㄹㄴㄹㄴㅁㄹㅁㄹㅁㄴㄹㅁㄴㅇㄹㅁㄴㅇㄹㅁㄴㅇㄹㅁㄴㄹㄴㄹㄴㄹㄴㅁㄹㄴㅁㅇㄹㅁㅇㄹㅁㄴㅇㄹㅁㅇㄴㄹㄴㅇㄹㅁㄴㄹㅇㄴㄹㅁㄴㅇㄹㄴㄹㄴㅁㄹㅁㄹㅁㄴㄹㅁㄴㅇㄹㅁㄴㅇㄹㅁㄴㅇㄹㅁㄴㄹㄴㄹㄴㄹㄴㅁㄹㄴㅁㄹㄴㅇㄹㄴㄹㄴㅇㄹㄴㅇㄹㄴㄹㄴㅇㅇㄹㅁㅇㄹㅁㄴㅇㄹㅁㅇㄴㄹㄴㅇㄹㅁㄴㄹㅇㄴㄹㅁㄴㅇㄹㄴㄹㄴㅁㄹㅁㄹㅁㄴㄹㅁㄴㅇㄹㅁㄴㅇㄹㅁㄴㅇㄹㅁㄴㄹㄴㄹㄴㄹㄴㅁㄹㄴㅁㄹㄴㅇㄹㄴㄹㄴㅇ
-                </Content>
-                <WrapWriteInfo>
-                  <Writer>
-                    <div className="profileImg">
-                      <img src="/images/sample5.png" alt="profile"></img>
-                    </div>
-                    나무늘보
-                  </Writer>
-                  <CreatedAt>2023.10.10</CreatedAt>
-                </WrapWriteInfo>
-              </Infomation>
-            </WhatPCCard>
-            <WhatPCCard
-              onClick={() => {
-                push("/what/1");
-              }}
-            >
-              <img
-                src="/images/sample1.png"
-                alt="where-card"
-                width="140px"
-                height="140px"
-              ></img>
-              <div className="icon">
-                <MorePhoto />
-              </div>
-              <Infomation>
-                <WrapLocation>
-                  <div>
-                    <span>합정동 근처</span>에서 하루를 보냈어요
-                  </div>
-                </WrapLocation>
-                <PCTitle>
-                  [하루일기] 어노브 연남 | 목화씨라운지 | OGOC공방
-                </PCTitle>
-                <Content>
-                  아오늘잘놀았네!ㅇㄹㅁㅇㄹㅁㄴㅇㄹㅁㅇㄴㄹㄴㅇㄹㅁㄴㄹㅇㄴㄹㅁㄴㅇㄹㄴㄹㄴㅁㄹㅁㄹㅁㄴㄹㅁㄴㅇㄹㅁㄴㅇㄹㅁㄴㅇㄹㅁㄴㄹㄴㄹㄴㄹㄴㅁㄹㄴㅁㅇㄹㅁㅇㄹㅁㄴㅇㄹㅁㅇㄴㄹㄴㅇㄹㅁㄴㄹㅇㄴㄹㅁㄴㅇㄹㄴㄹㄴㅁㄹㅁㄹㅁㄴㄹㅁㄴㅇㄹㅁㄴㅇㄹㅁㄴㅇㄹㅁㄴㄹㄴㄹㄴㄹㄴㅁㄹㄴㅁㄹㄴㅇㄹㄴㄹㄴㅇㄹㄴㅇㄹㄴㄹㄴㅇㅇㄹㅁㅇㄹㅁㄴㅇㄹㅁㅇㄴㄹㄴㅇㄹㅁㄴㄹㅇㄴㄹㅁㄴㅇㄹㄴㄹㄴㅁㄹㅁㄹㅁㄴㄹㅁㄴㅇㄹㅁㄴㅇㄹㅁㄴㅇㄹㅁㄴㄹㄴㄹㄴㄹㄴㅁㄹㄴㅁㄹㄴㅇㄹㄴㄹㄴㅇ
-                </Content>
-                <WrapWriteInfo>
-                  <Writer>
-                    <div className="profileImg">
-                      <img src="/images/sample5.png" alt="profile"></img>
-                    </div>
-                    나무늘보
-                  </Writer>
-                  <CreatedAt>2023.10.10</CreatedAt>
-                </WrapWriteInfo>
-              </Infomation>
-            </WhatPCCard>
-            {/* 여러 WhereCard 컴포넌트 추가 */}
+                  <Infomation>
+                    <WrapLocation>
+                      <div>
+                        <span>{shortenedAddress} 근처</span>에서 하루를 보냈어요
+                      </div>
+                    </WrapLocation>
+                    <PCTitle>{item.title}</PCTitle>
+                    <Content>{item.comment}</Content>
+                    <WrapWriteInfo>
+                      <Writer>
+                        <div className="profileImg">
+                          <Image
+                            src="/images/sample5.png"
+                            alt="profile"
+                            width={20}
+                            height={20}
+                          ></Image>
+                        </div>
+                        나무늘보
+                      </Writer>
+                      <CreatedAt>2023.10.10</CreatedAt>
+                    </WrapWriteInfo>
+                  </Infomation>
+                </WhatPCCard>
+              );
+            })}
             <Pagination>
               <div>
                 <DoublePrevPage />
@@ -321,62 +112,60 @@ const What = () => {
         </WrapPCCon>
 
         <MobileCardList>
-          <ReviewCard
-            onClick={() => {
-              push("/what/1");
-            }}
-          >
-            <Title>[하루일기] 어노브 연남 | 목화씨 라운지 | 망원한강공원</Title>
-            <ReviewImg>
-              <img src="/images/sample1.png"></img>
-              <img src="/images/sample2.png"></img>
-              <img src="/images/sample3.png"></img>
-            </ReviewImg>
-            <ReviewLocation>
-              <span>합정동 근처</span>에서 하루를 보냈어요.
-            </ReviewLocation>
-          </ReviewCard>
-          <ReviewCard
-            onClick={() => {
-              push("/what/1");
-            }}
-          >
-            <Title>[하루일기] 어노브 연남 | 목화씨 라운지 | 망원한강공원</Title>
-            <ReviewImg>
-              <img src="/images/sample1.png"></img>
-              <img src="/images/sample2.png"></img>
-              <img src="/images/sample3.png"></img>
-            </ReviewImg>
-            <ReviewLocation>
-              <span>합정동 근처</span>에서 하루를 보냈어요.
-            </ReviewLocation>
-          </ReviewCard>
-          <ReviewCard
-            onClick={() => {
-              push("/what/1");
-            }}
-          >
-            <Title>[하루일기] 어노브 연남 | 목화씨 라운지 | 망원한강공원</Title>
-            <ReviewImg>
-              <img src="/images/sample1.png"></img>
-              <img src="/images/sample2.png"></img>
-              <img src="/images/sample3.png"></img>
-            </ReviewImg>
-            <ReviewLocation>
-              <span>합정동 근처</span>에서 하루를 보냈어요.
-            </ReviewLocation>
-          </ReviewCard>
-          <ReviewCard>
-            <Title>[하루일기] 어노브 연남 | 목화씨 라운지 | 망원한강공원</Title>
-            <ReviewImg>
-              <img src="/images/sample1.png"></img>
-              <img src="/images/sample2.png"></img>
-              <img src="/images/sample3.png"></img>
-            </ReviewImg>
-            <ReviewLocation>
-              <span>합정동 근처</span>에서 하루를 보냈어요.
-            </ReviewLocation>
-          </ReviewCard>
+          {data?.map((item: any) => {
+            const addressParts = item?.address?.split(/[\s,]+/);
+
+            // 필요한 부분만 선택
+            const shortenedAddress = addressParts?.slice(1, 3).join(" ");
+            return (
+              <ReviewCard
+                key={item.postId}
+                onClick={() => {
+                  push("/what/1");
+                }}
+              >
+                <Title>[하루일기] {item.title}</Title>
+                <ReviewImg>
+                  <Image
+                    src="/images/sample1.png"
+                    alt="이미지1"
+                    style={{
+                      width: "calc(33.33%)",
+                      borderLeft: "1px solid #000",
+                      boxSizing: "border-box",
+                      aspectRatio: "1",
+                      objectFit: "cover",
+                    }}
+                  ></Image>
+                  <Image
+                    src="/images/sample2.png"
+                    alt="이미지2"
+                    style={{
+                      width: "calc(33.33%)",
+                      borderLeft: "1px solid #000",
+                      boxSizing: "border-box",
+                      aspectRatio: "1",
+                      objectFit: "cover",
+                    }}
+                  ></Image>
+                  <Image
+                    src="/images/sample3.png"
+                    alt="이미지3"
+                    style={{
+                      width: "calc(33.33%)",
+                      borderLeft: "1px solid #000",
+                      boxSizing: "border-box",
+                      aspectRatio: "1",
+                      objectFit: "cover",
+                    }}
+                  ></Image>
+                </ReviewImg>
+                <ReviewLocation>
+                  <span>{shortenedAddress} 근처</span>에서 하루를 보냈어요.
+                </ReviewLocation>
+              </ReviewCard>
+            );
+          })}
         </MobileCardList>
         {/* </div> */}
         {open && (
@@ -493,17 +282,21 @@ const ReviewLocation = styled.div`
 const WrapPCCon = styled.div`
   display: flex;
   gap: 20px;
+  width: 100%;
+  /* justify-content: space-between; */
 `;
 const PCCardList = styled.div`
   display: flex;
   flex-direction: column;
   gap: 20px;
+  width: 80%;
   @media (max-width: 600px) {
     display: none;
   }
 `;
 const WhatPCCard = styled.div`
   min-width: 457px;
+
   cursor: pointer;
   display: flex;
   border-radius: 5px;
@@ -523,13 +316,9 @@ const WhatPCCard = styled.div`
   }
 `;
 const RightCon = styled.div`
-  width: 100%;
-  max-width: 300px;
+  width: 20%;
   height: 400px;
   background-color: beige;
-  @media (max-width: 1000px) {
-    display: none;
-  }
 `;
 const Infomation = styled.div`
   display: inline-flex;
