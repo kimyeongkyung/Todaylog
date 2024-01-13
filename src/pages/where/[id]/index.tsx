@@ -15,8 +15,14 @@ import useGetWhereDetailReviews from "@/hooks/where/detail/useGetWhereDetailRevi
 import Image from "next/image";
 import { useRouter } from "next/router";
 import { useState } from "react";
-import { NavermapsProvider } from "react-naver-maps";
 import styled from "styled-components";
+interface WhereDetailDataType {
+  lat: string;
+  lng: string;
+  placeName: string;
+  address: string;
+  roadAddress: string;
+}
 
 const WhereDetail = ({}) => {
   const { query, push } = useRouter();
@@ -25,7 +31,7 @@ const WhereDetail = ({}) => {
 
   const placeId = query?.id !== undefined ? String(query.id) : undefined;
   const category =
-    query?.category !== undefined ? String(query.category) : undefined;
+    query?.category !== undefined ? String(query?.category) : undefined;
 
   const lat = query?.lat !== undefined ? String(query.lat) : undefined;
   const lng = query?.lng !== undefined ? String(query.lng) : undefined;
@@ -33,7 +39,9 @@ const WhereDetail = ({}) => {
   const data = useGetWhereDetailPost(placeId, category);
 
   const reviews = useGetWhereDetailReviews(category, lat, lng);
-  console.log({ reviews });
+
+  const singleMarkers = [{ lat: data?.lat, lng: data?.lng }];
+
   return (
     <Container>
       <WrapCon>
@@ -43,21 +51,21 @@ const WhereDetail = ({}) => {
               src="/images/sample1.png"
               alt="이미지1"
               className="img"
-            ></Image>{" "}
+            ></Image>
           </div>
           <div>
             <Image
               src="/images/sample1.png"
               alt="이미지1"
               className="img"
-            ></Image>{" "}
+            ></Image>
           </div>
           <div>
             <Image
               src="/images/sample1.png"
               alt="이미지1"
               className="img"
-            ></Image>{" "}
+            ></Image>
           </div>
         </WhatDetailImg>
         <Title>
@@ -83,7 +91,7 @@ const WhereDetail = ({}) => {
         </MobileWhatDetailImg>
         <WrapInfo>
           <Map>
-            <NaverMap lat={data?.lat} lng={data?.lng} />
+            <NaverMap markers={singleMarkers} />
             {/* <NaverMapComponent /> */}
             {/* <NavermapsProvider
               ncpClientId="d806azldce"

@@ -40,7 +40,7 @@ const What = () => {
         <WrapPCCon>
           <PCCardList>
             {data?.map((item) => {
-              const addressParts = item?.address?.split(/[\s,]+/);
+              const addressParts = item?.address.split(/[\s,]+/);
 
               // 필요한 부분만 선택
               const shortenedAddress = addressParts?.slice(1, 3).join(" ");
@@ -52,7 +52,7 @@ const What = () => {
                   }}
                 >
                   <Image
-                    src={item.images}
+                    src={item?.images}
                     alt="where-card"
                     width={140}
                     height={140}

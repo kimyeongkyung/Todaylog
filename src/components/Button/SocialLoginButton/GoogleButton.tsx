@@ -13,7 +13,7 @@ interface onSuccessType {
   credential: string;
   select_by: string;
 }
-const clientId = process.env.REACT_GOOGLE_LOGIN_CLIENT_ID;
+const clientId = process.env.REACT_GOOGLE_LOGIN_CLIENT_ID ?? "";
 const GoogleButton = ({}) => {
   const { push } = useRouter();
   //   useEffect(() => {

@@ -41,9 +41,7 @@ const Where = ({ isLogin }: { isLogin?: boolean }) => {
   const [clickThemeBtn, setClickThemeBtn] = useState<number[]>([]);
   const [clickWeatherBtn, setClickWeatherBtn] = useState<number[]>([]);
   const allData = useGetWherePosts();
-  console.log(allData);
   const categoryData = useGetCategoryPosts(activeKeyword);
-  console.log(categoryData);
   const conceptExample = [
     "모던한",
     "감성적인",
@@ -541,7 +539,7 @@ const Where = ({ isLogin }: { isLogin?: boolean }) => {
             {/* 전체 */}
             {activeKeyword === "전체" && allData && (
               <CultureCardList>
-                {allData?.location.map((data) => {
+                {allData?.map((data) => {
                   console.log(data.images);
                   const addressParts = data?.address?.split(/[\s,]+/);
 

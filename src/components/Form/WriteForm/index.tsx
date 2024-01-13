@@ -57,36 +57,31 @@ interface Props {
   handleNextStep: () => void;
   handlePrevStep: () => void;
   setFormData: (data: any) => void;
-  methods: UseFormReturn<
-    {
-      title?: string;
-    },
-    any
-  >;
+  methods: any;
   step: number;
   formData: {
-    title: "";
+    title: string;
     placeInfo: {
       firstPlace: {
-        keyword: [];
-        placeName: "";
-        images: [];
-        comment: "";
-        selectedHashTags: [];
+        keyword: string[];
+        placeName: string;
+        images: string[];
+        comment: string;
+        selectedHashTags: string[];
       };
       secondPlace: {
-        keyword: [];
-        placeName: "";
-        images: [];
-        comment: "";
-        selectedHashTags: [];
+        keyword: string[];
+        placeName: string;
+        images: string[];
+        comment: string;
+        selectedHashTags: string[];
       };
       lastPlace: {
-        keyword: [];
-        placeName: "";
-        images: [];
-        comment: "";
-        selectedHashTags: [];
+        keyword: string[];
+        placeName: string;
+        images: string[];
+        comment: string;
+        selectedHashTags: string[];
       };
     };
   };

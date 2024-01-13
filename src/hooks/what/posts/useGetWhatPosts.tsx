@@ -1,7 +1,15 @@
 import { useEffect, useState } from "react";
 
-const useGetWhatPosts = () => {
-  const [postData, setPostData] = useState(null);
+interface PostData {
+  address: string;
+  postId: string;
+  images: string;
+  title: string;
+  comment: string;
+}
+
+const useGetWhatPosts = (): PostData[] | null => {
+  const [postData, setPostData] = useState<PostData[] | null>(null);
 
   useEffect(() => {
     const fetchData = async () => {

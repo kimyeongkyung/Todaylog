@@ -1,9 +1,18 @@
 import { useEffect, useState } from "react";
 
-interface WherePostDataType {}
+interface WhereDataType {
+  id: string;
+  placeName: string;
+  images: string;
+  address: string;
+  category: string;
+  lat: string;
+  lng: string;
+  placeId: string;
+}
 
-const useGetWherePosts = () => {
-  const [postData, setPostData] = useState(null);
+const useGetWherePosts = (): WhereDataType[] | null => {
+  const [postData, setPostData] = useState<WhereDataType[] | null>(null);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -14,8 +23,8 @@ const useGetWherePosts = () => {
           throw new Error("Failed to fetch posts");
         }
 
-        const data = await response.json();
-        setPostData(data);
+        const { location } = await response.json();
+        setPostData(location);
       } catch (error: any) {
         console.error("Error using posts:", error.message);
       }

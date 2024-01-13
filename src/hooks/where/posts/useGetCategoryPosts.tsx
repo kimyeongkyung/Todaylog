@@ -1,8 +1,23 @@
 import { useEffect, useState } from "react";
 
-// 각 카테고리 탭 조회
-const useGetCategoryPosts = (category: string) => {
-  const [categoryData, setCategoryData] = useState(null);
+interface WhereGetCategoryDataType {
+  id: string;
+  placeName: string;
+  images: string;
+  address: string;
+  category: string;
+  lat: string;
+  lng: string;
+  placeId: string;
+}
+
+// 오늘뭐하지 각 카테고리 데이터 조회
+const useGetCategoryPosts = (
+  category: string
+): WhereGetCategoryDataType[] | null => {
+  const [categoryData, setCategoryData] = useState<
+    WhereGetCategoryDataType[] | null
+  >(null);
 
   useEffect(() => {
     const switchText = (category: string) => {

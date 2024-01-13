@@ -24,28 +24,30 @@ const WhatDetail = () => {
 
   const { title, restaurant, cafe, leisure } = data || {};
   //소수점 삽입 위한 로직
-  const convertrestaurantLat = parseFloat(
-    restaurant?.restaurantLat / 10000000
-  ).toFixed(7);
-  const convertrestaurantLng = parseFloat(
-    restaurant?.restaurantLng / 10000000
-  ).toFixed(7);
+  // const convertrestaurantLat = parseFloat(
+  //   restaurant?.restaurantLat / 10000000
+  // ).toFixed(7);
+  // const convertrestaurantLng = parseFloat(
+  //   restaurant?.restaurantLng / 10000000
+  // ).toFixed(7);
 
   //지도에 다중마커 표시
   const multiMarkers = [
     { lat: restaurant?.restaurantLat, lng: restaurant?.restaurantLng },
     { lat: cafe?.cafeLat, lng: cafe?.cafeLng },
     { lat: leisure?.leisureLat, lng: leisure?.leisureLng },
-  ];
+  ]
+    .filter((marker) => marker.lat !== undefined && marker.lng !== undefined)
+    .map((marker) => ({ lat: marker.lat!, lng: marker.lng! }));
 
   //지번주소 복사
-  const restaurantAddressToCopy = restaurant?.restaurantAddress;
-  const cafeAddressToCopy = cafe?.cafeAddress;
-  const leisureAddressToCopy = leisure?.leisureAddress;
+  const restaurantAddressToCopy = restaurant?.restaurantAddress || "";
+  const cafeAddressToCopy = cafe?.cafeAddress || "";
+  const leisureAddressToCopy = leisure?.leisureAddress || "";
   //도로명주소 복사
-  const restaurantRoadAddressToCopy = restaurant?.restaurantRoadAddress;
-  const cafeRoadAddressToCopy = cafe?.cafeRoadAddress;
-  const leisureRoadAddressToCopy = leisure?.leisureRoadAddress;
+  const restaurantRoadAddressToCopy = restaurant?.restaurantRoadAddress || "";
+  const cafeRoadAddressToCopy = cafe?.cafeRoadAddress || "";
+  const leisureRoadAddressToCopy = leisure?.leisureRoadAddress || "";
 
   const handleCopy = () => {
     alert("복사 완료");
