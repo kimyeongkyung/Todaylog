@@ -1,4 +1,6 @@
 import Container from "@/components/Container";
+import NaverMapComponent from "@/components/Map/NaverMap";
+import NaverMap from "@/components/Map/NaverMap";
 import {
   BookmarkOn,
   HashTag,
@@ -8,23 +10,58 @@ import {
   ReveiwPencil,
 } from "@/components/icons";
 import BookmarkOff from "@/components/icons/BookmarkOff";
+import useGetWhereDetailPost from "@/hooks/where/detail/useGetWhereDetailPost";
+import useGetWhereDetailReviews from "@/hooks/where/detail/useGetWhereDetailReviews";
+import Image from "next/image";
 import { useRouter } from "next/router";
 import { useState } from "react";
+import { NavermapsProvider } from "react-naver-maps";
 import styled from "styled-components";
 
-const WhereDetail = () => {
-  const { push } = useRouter();
+const WhereDetail = ({}) => {
+  const { query, push } = useRouter();
+  console.log(query);
   const [clickBookMark, setClickBookMark] = useState(false); //필터 키워드 체크박스 상태값
+
+  const placeId = query?.id !== undefined ? String(query.id) : undefined;
+  const category =
+    query?.category !== undefined ? String(query.category) : undefined;
+
+  const lat = query?.lat !== undefined ? String(query.lat) : undefined;
+  const lng = query?.lng !== undefined ? String(query.lng) : undefined;
+
+  const data = useGetWhereDetailPost(placeId, category);
+
+  const reviews = useGetWhereDetailReviews(category, lat, lng);
+  console.log({ reviews });
   return (
     <Container>
       <WrapCon>
         <WhatDetailImg>
-          <img src="/images/sample3.png"></img>
-          <img src="/images/sample6.png"></img>
-          <img src="/images/sample7.png"></img>
+          <div>
+            <Image
+              src="/images/sample1.png"
+              alt="이미지1"
+              className="img"
+            ></Image>{" "}
+          </div>
+          <div>
+            <Image
+              src="/images/sample1.png"
+              alt="이미지1"
+              className="img"
+            ></Image>{" "}
+          </div>
+          <div>
+            <Image
+              src="/images/sample1.png"
+              alt="이미지1"
+              className="img"
+            ></Image>{" "}
+          </div>
         </WhatDetailImg>
         <Title>
-          <div>OGOC 공방</div>
+          <div>{data?.placeName}</div>
           <div
             className="icon"
             onClick={(e) => {
@@ -36,11 +73,24 @@ const WhereDetail = () => {
           </div>
         </Title>
         <MobileWhatDetailImg>
-          <img src="/images/sample3.png"></img>
+          <div>
+            <Image
+              src="/images/sample3.png"
+              alt="오늘뭐하지 상세 이미지"
+              className="img"
+            ></Image>
+          </div>
         </MobileWhatDetailImg>
         <WrapInfo>
           <Map>
-            <img src="/images/sample8.png" alt="상세 위치 정보 지도"></img>
+            <NaverMap lat={data?.lat} lng={data?.lng} />
+            {/* <NaverMapComponent /> */}
+            {/* <NavermapsProvider
+              ncpClientId="d806azldce"
+              // or finClientId, govClientId
+            ></NavermapsProvider> */}
+
+            {/* <img src="/images/sample8.png" alt="상세 위치 정보 지도"></img> */}
           </Map>
 
           <WrapLocation>
@@ -48,18 +98,20 @@ const WhereDetail = () => {
               <div className="icon">
                 <Location />
               </div>
-              <div>서울 마포구 동교로 248-1 2층</div>
+              <div>{data?.address}</div>
             </Road>
             <div className="street">
-              <span>지번</span>연남동 228-48
+              <span>지번</span>
+              {data?.roadAddress}
             </div>
           </WrapLocation>
-          <PhoneNum>
+          {/* naver api 전화번호 정보 지원 안됨 */}
+          {/* <PhoneNum>
             <div className="icon">
               <Phone />
             </div>
             <div>0507-1331-7431</div>
-          </PhoneNum>
+          </PhoneNum> */}
           <WrapHashTag>
             <div className="icon">
               <HashTag />
@@ -77,150 +129,98 @@ const WhereDetail = () => {
             <div>리뷰</div>
           </WrapReview>
           <PCCardList>
-            <WhatPCCard
-              onClick={() => {
-                push("/what/1");
-              }}
-            >
-              <img
-                src="/images/sample1.png"
-                alt="where-card"
-                width="140px"
-                height="140px"
-              ></img>
-              <div className="icon">
-                <MorePhoto />
-              </div>
-              <Infomation>
-                <WrapNearby>
-                  <div>
-                    <span>합정동 근처</span>에서 하루를 보냈어요
+            {reviews?.map((item) => {
+              const addressParts = item?.address?.split(/[\s,]+/);
+
+              // 필요한 부분만 선택
+              const shortenedAddress = addressParts?.slice(1, 3).join(" ");
+              return (
+                <WhatPCCard
+                  key={item?.postId}
+                  onClick={() => {
+                    push(`/what/${item.postId}`);
+                  }}
+                >
+                  <Image
+                    src="/images/sample1.png"
+                    alt="where-card"
+                    width={140}
+                    height={140}
+                    className="img"
+                  ></Image>
+                  <div className="icon">
+                    <MorePhoto />
                   </div>
-                </WrapNearby>
-                <PCTitle>
-                  [하루일기] 어노브 연남 | 목화씨라운지 | OGOC공방
-                </PCTitle>
-                <Content>
-                  아오늘잘놀았네!ㅇㄹㅁㅇㄹㅁㄴㅇㄹㅁㅇㄴㄹㄴㅇㄹㅁㄴㄹㅇㄴㄹㅁㄴㅇㄹㄴㄹㄴㅁㄹㅁㄹㅁㄴㄹㅁㄴㅇㄹㅁㄴㅇㄹㅁㄴㅇㄹㅁㄴㄹㄴㄹㄴㄹㄴㅁㄹㄴㅁㅇㄹㅁㅇㄹㅁㄴㅇㄹㅁㅇㄴㄹㄴㅇㄹㅁㄴㄹㅇㄴㄹㅁㄴㅇㄹㄴㄹㄴㅁㄹㅁㄹㅁㄴㄹㅁㄴㅇㄹㅁㄴㅇㄹㅁㄴㅇㄹㅁㄴㄹㄴㄹㄴㄹㄴㅁㄹㄴㅁㄹㄴㅇㄹㄴㄹㄴㅇㄹㄴㅇㄹㄴㄹㄴㅇㅇㄹㅁㅇㄹㅁㄴㅇㄹㅁㅇㄴㄹㄴㅇㄹㅁㄴㄹㅇㄴㄹㅁㄴㅇㄹㄴㄹㄴㅁㄹㅁㄹㅁㄴㄹㅁㄴㅇㄹㅁㄴㅇㄹㅁㄴㅇㄹㅁㄴㄹㄴㄹㄴㄹㄴㅁㄹㄴㅁㄹㄴㅇㄹㄴㄹㄴㅇ
-                </Content>
-                <WrapWriteInfo>
-                  <Writer>
-                    <div className="profileImg">
-                      <img src="/images/sample5.png" alt="profile"></img>
-                    </div>
-                    나무늘보
-                  </Writer>
-                  <CreatedAt>2023.10.10</CreatedAt>
-                </WrapWriteInfo>
-              </Infomation>
-            </WhatPCCard>
-            {/* 여러 WhereCard 컴포넌트 추가 */}
-            <WhatPCCard
-              onClick={() => {
-                push("/what/1");
-              }}
-            >
-              <img
-                src="/images/sample1.png"
-                alt="where-card"
-                width="140px"
-                height="140px"
-              ></img>
-              <div className="icon">
-                <MorePhoto />
-              </div>
-              <Infomation>
-                <WrapNearby>
-                  <div>
-                    <span>합정동 근처</span>에서 하루를 보냈어요
-                  </div>
-                </WrapNearby>
-                <PCTitle>
-                  [하루일기] 어노브 연남 | 목화씨라운지 | OGOC공방
-                </PCTitle>
-                <Content>
-                  아오늘잘놀았네!ㅇㄹㅁㅇㄹㅁㄴㅇㄹㅁㅇㄴㄹㄴㅇㄹㅁㄴㄹㅇㄴㄹㅁㄴㅇㄹㄴㄹㄴㅁㄹㅁㄹㅁㄴㄹㅁㄴㅇㄹㅁㄴㅇㄹㅁㄴㅇㄹㅁㄴㄹㄴㄹㄴㄹㄴㅁㄹㄴㅁㅇㄹㅁㅇㄹㅁㄴㅇㄹㅁㅇㄴㄹㄴㅇㄹㅁㄴㄹㅇㄴㄹㅁㄴㅇㄹㄴㄹㄴㅁㄹㅁㄹㅁㄴㄹㅁㄴㅇㄹㅁㄴㅇㄹㅁㄴㅇㄹㅁㄴㄹㄴㄹㄴㄹㄴㅁㄹㄴㅁㄹㄴㅇㄹㄴㄹㄴㅇㄹㄴㅇㄹㄴㄹㄴㅇㅇㄹㅁㅇㄹㅁㄴㅇㄹㅁㅇㄴㄹㄴㅇㄹㅁㄴㄹㅇㄴㄹㅁㄴㅇㄹㄴㄹㄴㅁㄹㅁㄹㅁㄴㄹㅁㄴㅇㄹㅁㄴㅇㄹㅁㄴㅇㄹㅁㄴㄹㄴㄹㄴㄹㄴㅁㄹㄴㅁㄹㄴㅇㄹㄴㄹㄴㅇ
-                </Content>
-                <WrapWriteInfo>
-                  <Writer>
-                    <div className="profileImg">
-                      <img src="/images/sample5.png" alt="profile"></img>
-                    </div>
-                    나무늘보
-                  </Writer>
-                  <CreatedAt>2023.10.10</CreatedAt>
-                </WrapWriteInfo>
-              </Infomation>
-            </WhatPCCard>{" "}
-            <WhatPCCard
-              onClick={() => {
-                push("/what/1");
-              }}
-            >
-              <img
-                src="/images/sample1.png"
-                alt="where-card"
-                width="140px"
-                height="140px"
-              ></img>
-              <div className="icon">
-                <MorePhoto />
-              </div>
-              <Infomation>
-                <WrapNearby>
-                  <div>
-                    <span>합정동 근처</span>에서 하루를 보냈어요
-                  </div>
-                </WrapNearby>
-                <PCTitle>
-                  [하루일기] 어노브 연남 | 목화씨라운지 | OGOC공방
-                </PCTitle>
-                <Content>
-                  아오늘잘놀았네!ㅇㄹㅁㅇㄹㅁㄴㅇㄹㅁㅇㄴㄹㄴㅇㄹㅁㄴㄹㅇㄴㄹㅁㄴㅇㄹㄴㄹㄴㅁㄹㅁㄹㅁㄴㄹㅁㄴㅇㄹㅁㄴㅇㄹㅁㄴㅇㄹㅁㄴㄹㄴㄹㄴㄹㄴㅁㄹㄴㅁㅇㄹㅁㅇㄹㅁㄴㅇㄹㅁㅇㄴㄹㄴㅇㄹㅁㄴㄹㅇㄴㄹㅁㄴㅇㄹㄴㄹㄴㅁㄹㅁㄹㅁㄴㄹㅁㄴㅇㄹㅁㄴㅇㄹㅁㄴㅇㄹㅁㄴㄹㄴㄹㄴㄹㄴㅁㄹㄴㅁㄹㄴㅇㄹㄴㄹㄴㅇㄹㄴㅇㄹㄴㄹㄴㅇㅇㄹㅁㅇㄹㅁㄴㅇㄹㅁㅇㄴㄹㄴㅇㄹㅁㄴㄹㅇㄴㄹㅁㄴㅇㄹㄴㄹㄴㅁㄹㅁㄹㅁㄴㄹㅁㄴㅇㄹㅁㄴㅇㄹㅁㄴㅇㄹㅁㄴㄹㄴㄹㄴㄹㄴㅁㄹㄴㅁㄹㄴㅇㄹㄴㄹㄴㅇ
-                </Content>
-                <WrapWriteInfo>
-                  <Writer>
-                    <div className="profileImg">
-                      <img src="/images/sample5.png" alt="profile"></img>
-                    </div>
-                    나무늘보
-                  </Writer>
-                  <CreatedAt>2023.10.10</CreatedAt>
-                </WrapWriteInfo>
-              </Infomation>
-            </WhatPCCard>
+                  <Infomation>
+                    <WrapPlace>
+                      <div>
+                        <span>{shortenedAddress} 근처</span>에서 하루를 보냈어요
+                      </div>
+                    </WrapPlace>
+                    <PCTitle>{item.title}</PCTitle>
+                    <Content>{item.comment}</Content>
+                    <WrapWriteInfo>
+                      <Writer>
+                        <div className="profileImg">
+                          <Image
+                            src="/images/sample5.png"
+                            alt="profile"
+                            className="img"
+                            width={20}
+                            height={20}
+                          ></Image>
+                        </div>
+                        나무늘보
+                      </Writer>
+                      <CreatedAt>2023.10.10</CreatedAt>
+                    </WrapWriteInfo>
+                  </Infomation>
+                </WhatPCCard>
+              );
+            })}
           </PCCardList>
           <MobileCardList>
-            <ReviewCard>
-              <MobileTitle>
-                [하루일기] 어노브 연남 | 목화씨 라운지 | 망원한강공원
-              </MobileTitle>
-              <ReviewImg>
-                <img src="/images/sample1.png"></img>
-                <img src="/images/sample2.png"></img>
-                <img src="/images/sample3.png"></img>
-              </ReviewImg>
-            </ReviewCard>
-            <ReviewCard>
-              <MobileTitle>
-                [하루일기] 어노브 연남 | 목화씨 라운지 | 망원한강공원
-              </MobileTitle>
-              <ReviewImg>
-                <img src="/images/sample1.png"></img>
-                <img src="/images/sample2.png"></img>
-                <img src="/images/sample3.png"></img>
-              </ReviewImg>
-            </ReviewCard>
-            <ReviewCard>
-              <MobileTitle>
-                [하루일기] 어노브 연남 | 목화씨 라운지 | 망원한강공원
-              </MobileTitle>
-              <ReviewImg>
-                <img src="/images/sample1.png"></img>
-                <img src="/images/sample2.png"></img>
-                <img src="/images/sample3.png"></img>
-              </ReviewImg>
-            </ReviewCard>
+            {reviews?.map((item) => {
+              const addressParts = item?.address?.split(/[\s,]+/);
+
+              // 필요한 부분만 선택
+              const shortenedAddress = addressParts?.slice(1, 3).join(" ");
+              return (
+                <ReviewCard
+                  key={item.postId}
+                  onClick={() => {
+                    push(`/what/${item.postId}`);
+                  }}
+                >
+                  <MobileTitle>
+                    [하루일기] 어노브 연남 | 목화씨 라운지 | 망원한강공원
+                  </MobileTitle>
+                  <ReviewImg>
+                    <div>
+                      <Image
+                        src="/images/sample1.png"
+                        alt="어디가지 상세 이미지1"
+                        className="img"
+                      ></Image>
+                    </div>
+                    <div>
+                      <Image
+                        src="/images/sample1.png"
+                        alt="어디가지 상세 이미지1"
+                        className="img"
+                      ></Image>
+                    </div>
+                    <div>
+                      <Image
+                        src="/images/sample1.png"
+                        alt="어디가지 상세 이미지1"
+                        className="img"
+                      ></Image>
+                    </div>
+                  </ReviewImg>
+                </ReviewCard>
+              );
+            })}
           </MobileCardList>
         </WrapInfo>
       </WrapCon>
@@ -229,6 +229,7 @@ const WhereDetail = () => {
 };
 export default WhereDetail;
 const WrapCon = styled.div`
+  width: 100%;
   padding-top: 34px;
   display: inline-flex;
   flex-direction: column;
@@ -243,13 +244,13 @@ const WhatDetailImg = styled.div`
   display: flex;
   justify-content: space-between;
   width: 100%;
-  img {
+  div {
     width: calc(33.33%);
     box-sizing: border-box;
     aspect-ratio: 1.3 / 1;
     object-fit: cover;
   }
-  img:nth-of-type(1) {
+  div:nth-of-type(1) {
     border-left: none;
   }
   @media (max-width: 600px) {
@@ -262,7 +263,7 @@ const MobileWhatDetailImg = styled.div`
   display: flex;
   justify-content: space-between;
   width: 100%;
-  img {
+  div {
     width: 100%;
     border-left: 1px solid #000;
     box-sizing: border-box;
@@ -288,6 +289,7 @@ const Title = styled.div`
 `;
 
 const WrapInfo = styled.div`
+  width: 100%;
   display: flex;
   flex-direction: column;
   gap: 16px;
@@ -393,6 +395,12 @@ const WhatPCCard = styled.div`
     left: 135px;
   }
 `;
+
+const WrapPlace = styled.div`
+  span {
+    font-weight: bold;
+  }
+`;
 const Infomation = styled.div`
   display: inline-flex;
   flex-direction: column;
@@ -467,7 +475,7 @@ const ReviewImg = styled.div`
   display: flex;
   justify-content: space-between;
 
-  img {
+  div {
     width: calc(33.33%);
 
     border-left: 1px solid #000;
@@ -475,7 +483,7 @@ const ReviewImg = styled.div`
     aspect-ratio: 1;
     object-fit: cover;
   }
-  img:nth-of-type(1) {
+  div:nth-of-type(1) {
     border-left: none;
   }
 `;
