@@ -12,9 +12,9 @@ const ArrowLeft = () => {
       <path
         d="M9.925 17.5L2.5 10L9.925 2.5M3.53125 10L16.5 10"
         stroke="black"
-        stroke-width="2"
-        stroke-linecap="round"
-        stroke-linejoin="round"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
       />
     </svg>
   );

@@ -1,8 +1,11 @@
 import BackHeader from "@/components/BackHeader";
+import GoogleButton from "@/components/Button/SocialLoginButton/GoogleButton";
 import Container from "@/components/Container";
 import Header from "@/components/Header";
 import Input from "@/components/Input";
 import { Duck } from "@/components/icons";
+import axios from "axios";
+import { gapi } from "gapi-script";
 import Image from "next/image";
 import { useRouter } from "next/router";
 import styled from "styled-components";
@@ -32,9 +35,11 @@ const Login = () => {
           </WrapLogin>
 
           <WrapSocial>
-            <div className="kakao">카카오로 계속하기</div>
-            <div className="naver">네이버로 계속하기</div>
-            <div className="google">구글로 계속하기</div>
+            {/* <div className="kakao">카카오로 계속하기</div>
+            <div className="naver">네이버로 계속하기</div> */}
+            {/* <div className="google"> */}
+            <GoogleButton />
+            {/* </div> */}
             <Line></Line>
             <p>소셜 계정이 없으신가요?</p>
             <div

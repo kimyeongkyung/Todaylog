@@ -5,7 +5,7 @@ import Input from "@/components/Input";
 import EditModal from "@/components/Modal/EditModal";
 import { ArrowLeft, MyBookmark, MyEdit, MyNotice } from "@/components/icons";
 import MyPost from "@/components/icons/MyPost";
-import Image from "next/image";
+import axios from "axios";
 import { useRouter } from "next/router";
 import { useState } from "react";
 import styled from "styled-components";
@@ -13,10 +13,27 @@ import styled from "styled-components";
 const Mypage = () => {
   const { push } = useRouter();
   const [isOpen, setIsOpen] = useState(false);
-
+  const handleLogout = async () => {
+    try {
+      // 서버에 로그아웃 요청 보내기
+      const response = await axios.post("http://localhost:4000/logout", {
+        withCredentials: true,
+      });
+      // const auth2 = gapi.auth2.getAuthInstance();
+      // auth2.signOut().then(null, (err) => {
+      //   console.error("Error signing out:", err);
+      // });
+      // 로그아웃이 성공하면 클라이언트 측에서 사용자 상태 업데이트
+      // 서버에서 반환하는 로그아웃 관련 정보
+      // 여기서 로그인 상태를 업데이트하거나 리다이렉션 등의 작업 수행
+    } catch (error) {
+      console.error("Error during logout:", error);
+    }
+  };
   return (
     <>
       <Container>
+        <button onClick={handleLogout}>Logout</button>
         {/* Mobile */}
         <WrapMobile>
           <BackHeader title="마이페이지" />

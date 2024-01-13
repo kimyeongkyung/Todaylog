@@ -47,6 +47,7 @@ import PercentBar from "./PercentBar";
 import EmptyPercentBar from "./EmptyPercentBar";
 import Camera from "./Camera";
 import Reset from "./Reset";
+import DeletePhoto from "./DeletePhoto";
 
 export {
   Camera,
@@ -96,5 +97,6 @@ export {
   Sorting,
   BookmarkOn,
   MorePhoto,
+  DeletePhoto,
   Reset,
 };

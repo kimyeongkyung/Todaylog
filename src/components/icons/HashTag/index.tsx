@@ -12,74 +12,74 @@ const HashTag = () => {
       <path
         d="M6.61133 1L4.74894 14.9386"
         stroke="#FFC700"
-        stroke-width="2"
-        stroke-linecap="round"
+        strokeWidth="2"
+        strokeLinecap="round"
       />
       <path
         d="M6.61133 1L4.74894 14.9386"
         stroke="#FFC700"
-        stroke-width="2"
-        stroke-linecap="round"
+        strokeWidth="2"
+        strokeLinecap="round"
       />
       <path
         d="M6.61133 1L4.74894 14.9386"
         stroke="#FFC700"
-        stroke-width="2"
-        stroke-linecap="round"
+        strokeWidth="2"
+        strokeLinecap="round"
       />
       <path
         d="M12.2363 1L10.3739 14.9386"
         stroke="#FFC700"
-        stroke-width="2"
-        stroke-linecap="round"
+        strokeWidth="2"
+        strokeLinecap="round"
       />
       <path
         d="M12.2363 1L10.3739 14.9386"
         stroke="#FFC700"
-        stroke-width="2"
-        stroke-linecap="round"
+        strokeWidth="2"
+        strokeLinecap="round"
       />
       <path
         d="M12.2363 1L10.3739 14.9386"
         stroke="#FFC700"
-        stroke-width="2"
+        strokeWidth="2"
         stroke-linecap="round"
       />
       <path
         d="M16 4.75L1.9375 4.75"
         stroke="#FFC700"
-        stroke-width="2"
-        stroke-linecap="round"
+        strokeWidth="2"
+        strokeLinecap="round"
       />
       <path
         d="M16 4.75L1.9375 4.75"
         stroke="#FFC700"
-        stroke-width="2"
-        stroke-linecap="round"
+        strokeWidth="2"
+        strokeLinecap="round"
       />
       <path
         d="M16 4.75L1.9375 4.75"
         stroke="#FFC700"
-        stroke-width="2"
-        stroke-linecap="round"
+        strokeWidth="2"
+        strokeLinecap="round"
       />
       <path
         d="M15.0625 10.375L1 10.375"
         stroke="#FFC700"
-        stroke-width="2"
-        stroke-linecap="round"
+        strokeWidth="2"
+        strokeLinecap="round"
       />
       <path
         d="M15.0625 10.375L1 10.375"
         stroke="#FFC700"
-        stroke-width="2"
-        stroke-linecap="round"
+        strokeWidth="2"
+        strokeLinecap="round"
       />
       <path
         d="M15.0625 10.375L1 10.375"
         stroke="#FFC700"
-        stroke-width="2"
-        stroke-linecap="round"
+        strokeWidth="2"
+        strokeLinecap="round"
       />
     </svg>
   );

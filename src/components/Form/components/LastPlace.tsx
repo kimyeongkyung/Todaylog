@@ -1,12 +1,111 @@
 import Input from "@/components/Input";
-import { Camera } from "@/components/icons";
-import React, { useState } from "react";
+import {
+  Camera,
+  DeletePhoto,
+  NextChapter,
+  PrevChapter,
+} from "@/components/icons";
+import UploadImage from "@/components/image/UploadImage";
+import axios from "axios";
+import { useRouter } from "next/router";
+import React, { useEffect, useState } from "react";
+import { useFormContext } from "react-hook-form";
 import styled from "styled-components";
 
-const LastPlace = () => {
-  const [clickKeyword, setClickKeyword] = useState<number[]>([]);
+interface SelectPlaceType {
+  id: string;
+  title: string;
+  address: string;
+  roadAddress: string;
+  mapx: string;
+  mapy: string;
+}
+
+const FirstPlace = ({
+  handleNextStep,
+  handlePrevStep,
+  setFormData,
+}: {
+  handleNextStep: () => void;
+  handlePrevStep: () => void;
+  setFormData: (data: any) => void;
+}) => {
+  const { push } = useRouter();
+  const [clickKeyword, setClickKeyword] = useState<string[]>([]);
   const [clickThemeBtn, setClickThemeBtn] = useState<number[]>([]);
   const [clickWeatherBtn, setClickWeatherBtn] = useState<number[]>([]);
+  const [images, setImages] = useState<string[]>([]);
+
+  const [selectedKeyword, setSelectedKeyword] = useState<string>(
+    localStorage.getItem("selectedLastKeyword") || ""
+  );
+
+  const [placeName, setPlaceName] = useState("");
+  const [query, setQuery] = useState("");
+  const [searchResults, setSearchResults] = useState([]); // 검색 결과 상태
+  const [selectedPlace, setSelectedPlace] = useState({
+    placeName: "",
+    address: "",
+    roadAddress: "",
+    mapx: "",
+    mapy: "",
+  });
+
+  const [comment, setComment] = useState({});
+
+  const { setValue, getValues, register } = useFormContext();
+  const [selectedHashTags, setSelectedHashTags] = useState<string[]>([]);
+
+  // 키워드가 변경될 때마다 로컬 스토리지에 저장
+  useEffect(() => {
+    localStorage.setItem("selectedFirstKeyword", selectedKeyword);
+  }, [selectedKeyword]);
+
+  // 이미지가 변경될 때마다 로컬 스토리지에 저장
+  useEffect(() => {
+    localStorage.setItem("selectedFirstImages", JSON.stringify(images));
+  }, [images]);
+
+  // 해시태그가 변경될 때마다 로컬 스토리지에 저장
+  useEffect(() => {
+    localStorage.setItem(
+      "selectedFirstHashTags",
+      JSON.stringify(selectedHashTags)
+    );
+  }, [selectedHashTags]);
+
+  // 장소 검색 - 네이버 오픈 api
+  const handleSearch = async () => {
+    try {
+      const response = await axios.post("http://localhost:4000/searchPlace", {
+        placeName: query,
+      });
+      console.log(response.data.places);
+      setSearchResults(response.data.places);
+    } catch (error) {
+      console.error("Error searching for place:", error);
+    }
+  };
+
+  const handlePlaceSelection = (result: SelectPlaceType) => {
+    console.log(result);
+    const { title, address, roadAddress, mapx, mapy } = result;
+    const placeName = title.replace(/<[^>]*>/g, "");
+    // 사용자가 장소를 선택했을 때 실행되는 함수
+    setSelectedPlace({ placeName, address, roadAddress, mapx, mapy });
+    setQuery(placeName); // 선택한 장소의 title을 인풋에 설정
+
+    // 선택한 장소를 콘솔에 출력
+    console.log("Selected place:", {
+      placeName,
+      address,
+      roadAddress,
+      mapx,
+      mapy,
+    });
+    // 검색결과 리스트를 숨김
+    setSearchResults([]);
+  };
 
   const keywordList = ["음식점", "카페", "문화/여가"];
 
@@ -35,6 +134,79 @@ const LastPlace = () => {
     "겨울",
   ];
 
+  const handleKeywordClick = (keyword: string) => {
+    // 선택한 키워드의 개수가 1개 미만인 경우에만 선택 추가 또는 해제
+    if (selectedKeyword === keyword) {
+      // 이미 선택된 경우 해제
+      setSelectedKeyword("");
+    } else {
+      // 선택되지 않은 경우 선택 추가
+      setSelectedKeyword(keyword);
+    }
+  };
+
+  const handleHashTagClick = (tag: string) => {
+    // 선택한 해시태그의 개수가 3개 미만인 경우에만 선택 추가
+    // 이미 선택된 경우 선택 해제
+    if (selectedHashTags.includes(tag)) {
+      setSelectedHashTags((prevTags) =>
+        prevTags.filter((prevTag) => prevTag !== tag)
+      );
+    } else {
+      // 선택된 태그의 개수가 3개 미만인 경우에만 선택 추가
+      if (selectedHashTags.length < 3) {
+        // 선택되지 않은 경우 선택 추가
+        setSelectedHashTags((prevTags) => [...prevTags, tag]);
+      }
+    }
+  };
+
+  const handleImageDelete = (index: number) => {
+    const updatedImages = [...images];
+    updatedImages.splice(index, 1);
+    setImages(updatedImages);
+  };
+
+  const handleImageChange = (uploadedImages: string[]) => {
+    setImages([...images, ...uploadedImages]);
+  };
+  const handleNext = () => {
+    // 여기서 필요한 데이터 수집
+    const newPlaceData = {
+      // placeData의 기존 정보 + 새로운 정보들...
+      //키워드
+      keyword: selectedKeyword,
+      images,
+      comment,
+      // 장소명, 주소값 전달 -> 백엔드에서 주소값을 좌표로 변환 -> 상세페이지에서 지도로 표시
+      placeName: selectedPlace.placeName,
+      address: selectedPlace.address,
+      roadAddress: selectedPlace.roadAddress,
+      //위도
+      lat: selectedPlace.mapx,
+      //경도
+      lng: selectedPlace.mapy,
+      tags: selectedHashTags,
+      // location: {
+      //   lat: selectedPlace.y,
+      //   lng: selectedPlace.x,
+      // },
+    };
+    console.log(newPlaceData);
+
+    setFormData((prevData: any) => {
+      console.log("끌고온 값:", prevData);
+      return {
+        ...prevData,
+        placeInfo: { ...prevData.placeInfo, lastPlace: { ...newPlaceData } },
+      };
+    });
+    alert("정상적으로 발행되었어요.");
+    // push("/");
+    // 다음 단계로 이동하는 로직
+    // handleNextStep();
+  };
+
   return (
     <>
       <WrapKeyword>
@@ -49,25 +221,14 @@ const LastPlace = () => {
             }}
           >
             {keywordList.map((item, key) => {
-              const isCardClicked = clickKeyword.includes(key); // 해당 카드가 클릭되었는지 확인
+              const isSelected = selectedKeyword.includes(item);
               return (
                 <Keyword
                   key={key}
-                  onClick={() => {
-                    // 카드 클릭 시 클릭된 카드의 상태를 업데이트
-                    if (isCardClicked) {
-                      // 이미 클릭된 경우 클릭 상태에서 제거
-                      setClickKeyword(
-                        clickKeyword.filter((cardKey) => cardKey !== key)
-                      );
-                    } else {
-                      // 클릭되지 않은 경우 클릭 상태에 추가
-                      setClickKeyword([...clickKeyword, key]);
-                    }
-                  }}
+                  onClick={() => handleKeywordClick(item)}
                   style={{
-                    backgroundColor: isCardClicked ? "#fcc700" : "#fff",
-                    color: isCardClicked ? "#fff" : "#fcc700",
+                    backgroundColor: isSelected ? "#fcc700" : "#fff",
+                    color: isSelected ? "#fff" : "#fcc700",
                   }}
                 >
                   {item}
@@ -81,28 +242,61 @@ const LastPlace = () => {
           <Search>
             <Input
               type="text"
-              id="id"
+              id="lastPlaceName"
+              value={query}
+              {...register("lastPlaceName")}
               style={{ fontSize: "14px" }}
               placeholder="장소명을 입력해주세요."
+              // onChange={(e) => setPlaceName(e.target.value)}
+              onChange={(e) => setQuery(e.target.value)}
             ></Input>
-            <CheckBtn onClick={() => {}}>필터</CheckBtn>
+            <CheckBtn onClick={handleSearch}>검색</CheckBtn>{" "}
+            {/* 검색 결과 표시 */}
+            <WrapSearchResult showResults={searchResults.length > 0}>
+              {searchResults?.length > 0 && (
+                <>
+                  {searchResults.map((result: SelectPlaceType) => (
+                    <div
+                      onClick={() => handlePlaceSelection(result)}
+                      key={result.id}
+                      className="content"
+                    >
+                      <SearchResultTitle>
+                        {result.title.replace(/<[^>]*>/g, "")}
+                      </SearchResultTitle>
+                      <SearchResultAddress>
+                        {result.address}
+                      </SearchResultAddress>
+                    </div>
+                  ))}
+                </>
+              )}
+            </WrapSearchResult>
           </Search>
         </div>
         <div>
           <div className="label">사진 선택(최대 3장)</div>
           <WrapUpload>
-            <UploadBtn>
-              <label htmlFor="image">
-                <div className="icon">
-                  <Camera />
-                </div>
-              </label>
-              <input type="file" id="image" />
-            </UploadBtn>
+            <UploadImage setImageList={handleImageChange} />
             <Upload>
-              <div className="photo1"></div>
-              <div className="photo2"></div>
-              <div className="photo3"></div>
+              {images.map((image, index) => {
+                return (
+                  <div
+                    key={index}
+                    className="photo"
+                    style={{
+                      backgroundImage: `url(${image})`,
+                    }}
+                  >
+                    <div
+                      className="delete-icon"
+                      onClick={() => handleImageDelete(index)}
+                    >
+                      <DeletePhoto />
+                    </div>
+                  </div>
+                );
+              })}
             </Upload>
           </WrapUpload>
         </div>
@@ -111,6 +305,7 @@ const LastPlace = () => {
           <ReviewTextarea
             placeholder="이 장소에 대해 간단하게 소개해주세요."
             maxLength={200}
+            onChange={(e) => setComment(e.target.value)}
           ></ReviewTextarea>
         </div>
         <div>
@@ -125,25 +320,26 @@ const LastPlace = () => {
             >
               {themeExample.map((item, key) => {
                 const isCardClicked = clickThemeBtn.includes(key); // 해당 카드가 클릭되었는지 확인
-
+                const isSelected = selectedHashTags.includes(item);
                 return (
                   <ConceptCard
                     key={key}
-                    onClick={() => {
-                      // 카드 클릭 시 클릭된 카드의 상태를 업데이트
-                      if (isCardClicked) {
-                        // 이미 클릭된 경우 클릭 상태에서 제거
-                        setClickThemeBtn(
-                          clickThemeBtn.filter((cardKey) => cardKey !== key)
-                        );
-                      } else {
-                        // 클릭되지 않은 경우 클릭 상태에 추가
-                        setClickThemeBtn([...clickThemeBtn, key]);
-                      }
-                    }}
+                    onClick={() => handleHashTagClick(item)}
+                    // onClick={() => {
+                    //   // 카드 클릭 시 클릭된 카드의 상태를 업데이트
+                    //   if (isCardClicked) {
+                    //     // 이미 클릭된 경우 클릭 상태에서 제거
+                    //     setClickThemeBtn(
+                    //       clickThemeBtn.filter((cardKey) => cardKey !== key)
+                    //     );
+                    //   } else {
+                    //     // 클릭되지 않은 경우 클릭 상태에 추가
+                    //     setClickThemeBtn([...clickThemeBtn, key]);
+                    //   }
+                    // }}
                     style={{
-                      backgroundColor: isCardClicked ? "#fcc700" : "#fff",
-                      color: isCardClicked ? "#fff" : "#000",
+                      backgroundColor: isSelected ? "#fcc700" : "#fff",
+                      color: isSelected ? "#fff" : "#000",
                     }}
                   >
                     {item}
@@ -159,26 +355,28 @@ const LastPlace = () => {
               }}
             >
               {weatherExample.map((item, key) => {
-                const isCardClicked = clickWeatherBtn.includes(key); // 해당 카드가 클릭되었는지 확인
-
+                // const isCardClicked = clickWeatherBtn.includes(key); // 해당 카드가 클릭되었는지 확인
+                const isCardClicked = clickWeatherBtn.includes(key);
+                const isSelected = selectedHashTags.includes(item);
                 return (
                   <ConceptCard
                     key={key}
-                    onClick={() => {
-                      // 카드 클릭 시 클릭된 카드의 상태를 업데이트
-                      if (isCardClicked) {
-                        // 이미 클릭된 경우 클릭 상태에서 제거
-                        setClickWeatherBtn(
-                          clickWeatherBtn.filter((cardKey) => cardKey !== key)
-                        );
-                      } else {
-                        // 클릭되지 않은 경우 클릭 상태에 추가
-                        setClickWeatherBtn([...clickWeatherBtn, key]);
-                      }
-                    }}
+                    // onClick={() => {
+                    //   // 카드 클릭 시 클릭된 카드의 상태를 업데이트
+                    //   if (isCardClicked) {
+                    //     // 이미 클릭된 경우 클릭 상태에서 제거
+                    //     setClickWeatherBtn(
+                    //       clickWeatherBtn.filter((cardKey) => cardKey !== key)
+                    //     );
+                    //   } else {
+                    //     // 클릭되지 않은 경우 클릭 상태에 추가
+                    //     setClickWeatherBtn([...clickWeatherBtn, key]);
+                    //   }
+                    // }}
+                    onClick={() => handleHashTagClick(item)}
                     style={{
-                      backgroundColor: isCardClicked ? "#fcc700" : "#fff",
-                      color: isCardClicked ? "#fff" : "#000",
+                      backgroundColor: isSelected ? "#fcc700" : "#fff",
+                      color: isSelected ? "#fff" : "#000",
                     }}
                   >
                     {item}
@@ -189,11 +387,32 @@ const LastPlace = () => {
           </HashTag>
         </div>
       </WrapKeyword>
+      <WrapBtn>
+        <button
+          onClick={() => {
+            handlePrevStep();
+          }}
+          style={{ backgroundColor: "#fff" }}
+        >
+          <PrevChapter />
+        </button>
+        <WrapLastBtn>
+          <PreviewBtn>미리보기</PreviewBtn>
+          <SaveBtn
+            form="write-todaylog"
+            onClick={() => {
+              handleNext();
+            }}
+          >
+            발행
+          </SaveBtn>
+        </WrapLastBtn>
+      </WrapBtn>
     </>
   );
 };
 
-export default LastPlace;
+export default FirstPlace;
 
 const WrapKeyword = styled.div`
   display: flex;
@@ -208,6 +427,7 @@ const WrapKeyword = styled.div`
       font-size: 14px;
     }
   }
+  margin-bottom: 25px;
 `;
 
 const Keyword = styled.div`
@@ -219,9 +439,10 @@ const Keyword = styled.div`
   color: #ffc700;
   font-size: 12px;
 `;
-
 const Search = styled.div`
   display: flex;
+  gap: 10px;
+  position: relative;
 `;
 
 const CheckBtn = styled.div`
@@ -234,27 +455,31 @@ const CheckBtn = styled.div`
   color: #bcbcbc;
   font-size: 14px;
   cursor: pointer;
-  margin-left: 6px;
 `;
 
 const WrapUpload = styled.div`
   width: 100%;
   display: flex;
   gap: 20px;
+  @media (max-width: 600px) {
+    gap: 10px;
+  }
   box-sizing: border-box;
-  /* justify-content: baseline; */
 `;
 const UploadBtn = styled.div`
-  height: 100px;
-
   label {
     position: relative;
     display: inline-block;
+
     width: 100px;
     height: 100px;
     cursor: pointer;
     border-radius: 3px;
     background-color: #000;
+    @media (max-width: 600px) {
+      width: 70px;
+      height: 70px;
+    }
     .icon {
       display: inline-block;
       align-items: center;
@@ -279,15 +504,30 @@ const UploadBtn = styled.div`
 const Upload = styled.div`
   display: flex;
   gap: 20px;
+  @media (max-width: 600px) {
+    gap: 10px;
+  }
 
-  div {
+  .photo {
     width: 100px;
     height: 100px;
     border: 1px solid #d9d9d9;
     border-radius: 3px;
+    background-size: cover; // 이미지를 비율 유지하며 가득 채우도록 설정
+    background-position: center; // 이미지를 가운데 정렬
+    @media (max-width: 600px) {
+      width: 70px;
+      height: 70px;
+    }
+    position: relative;
+    .delete-icon {
+      position: absolute;
+      top: 0;
+      right: 5px;
+      cursor: pointer;
+    }
   }
 `;
-
 const ReviewTextarea = styled.textarea`
   border: 1px solid #d9d9d9;
   width: 100%;
@@ -313,4 +553,80 @@ const ConceptCard = styled.div`
   padding: 6px;
   font-size: 13px;
   text-align: center;
+`;
+const WrapBtn = styled.div`
+  display: flex;
+  justify-content: space-between;
+  button {
+    cursor: pointer;
+  }
+`;
+const WrapLastBtn = styled.div`
+  display: flex;
+  gap: 10px;
+`;
+const PreviewBtn = styled.button`
+  font-size: 14px;
+  padding: 8px 0px;
+  width: 76px;
+  border: 1px solid #ffc700;
+  color: #ffc700;
+  border-radius: 5px;
+  background-color: #fff;
+`;
+const SaveBtn = styled.button`
+  font-size: 14px;
+  padding: 8px 0px;
+  width: 76px;
+  border: 1px solid #ffc700;
+  color: #fff;
+  border-radius: 5px;
+  background-color: #ffc700;
+`;
+const AddPlaceBtn = styled.button`
+  font-size: 14px;
+  padding: 8px 0px;
+  width: 76px;
+  color: #fff;
+  border-radius: 5px;
+  background-color: #ffc700;
+`;
+const WrapSearchResult = styled.div`
+  display: ${(props: { showResults: boolean }) =>
+    props.showResults ? "flex" : "none"};
+  flex-direction: column;
+
+  position: absolute;
+  top: 100%;
+  left: 0;
+  z-index: 100;
+  width: 100%;
+  box-sizing: border-box;
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  max-height: 200px; // 원하는 높이로 조정
+  overflow-y: auto;
+  border-bottom: 2px solid #ddd;
+  border-right: 2px solid #ddd;
+  border-left: 2px solid #ddd;
+  border-bottom-left-radius: 5px;
+  border-bottom-right-radius: 5px;
+  .content {
+    cursor: pointer;
+    padding: 10px 0 10px 16px;
+    border-bottom: 1px solid #ddd;
+    &:hover {
+      background-color: rgba(204, 162, 48, 0.5); // 불투명한 블랙 색상으로 변경
+      color: #fff; // 텍스트 색상 변경
+    }
+  }
+`;
+const SearchResultTitle = styled.div`
+  font-size: 15px;
+  font-weight: bold;
+`;
+const SearchResultAddress = styled.div`
+  font-size: 13px;
 `;

@@ -1,18 +1,29 @@
 import Input from "@/components/Input";
 import { NextChapter, PrevChapter } from "@/components/icons";
 import Guide from "@/components/icons/Guide";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { useForm, useFormContext } from "react-hook-form";
 import styled from "styled-components";
 
-const TitleWrite = () => {
+const TitleWrite = ({
+  handleNextStep,
+  handlePrevStep,
+  setFormData,
+}: {
+  handleNextStep: () => void;
+  handlePrevStep: () => void;
+  setFormData: (data: any) => void;
+}) => {
+  const [title, setTitle] = useState("");
   const [isTooltipVisible, setTooltipVisible] = useState(false);
+  const { setValue, register } = useFormContext();
 
-  const handleMouseEnter = () => {
-    setTooltipVisible(true);
-  };
-
-  const handleMouseLeave = () => {
-    setTooltipVisible(false);
+  const handleSignUp = async () => {
+    // 입력된 제목을 상태로 저장
+    setFormData({ title });
+    setValue("title", title);
+    // 다음 단계로 넘어가기
+    handleNextStep();
   };
 
   return (
@@ -22,19 +33,24 @@ const TitleWrite = () => {
           <div>하루 일기를 대표할 제목을 설정해 주세요.</div>
           <Input
             type="text"
+            // id="title"
+            value={title}
+            {...register("title")}
             placeholder="ex.000피자 | 00카페 | 00한강공원"
-          ></Input>
+            onChange={(e) => setTitle(e.target.value)}
+          />
         </div>
       </WrapWrite>
-
-      {/* <div> */}
-      {/* {data.map((item) => (
-  <div key={item.id}>
-    {item.name} - {item.region} - {item.age}
-  </div>
-))} */}
-      {/* </div> */}
-      {/* <ButtonCustom onClick={handleSendRequest}>Send POST Request</ButtonCustom> */}
+      <WrapBtn>
+        <button
+          onClick={() => {
+            handleSignUp();
+          }}
+          style={{ backgroundColor: "#fff" }}
+        >
+          <NextChapter />
+        </button>
+      </WrapBtn>
     </WrapCon>
   );
 };
@@ -106,6 +122,9 @@ const ButtonCustom = styled.button`
 const WrapBtn = styled.div`
   display: flex;
   justify-content: space-between;
+  button {
+    cursor: pointer;
+  }
 `;
 const WrapGuide = styled.div`
   width: 100%;

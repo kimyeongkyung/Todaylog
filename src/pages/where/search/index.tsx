@@ -11,6 +11,7 @@ import {
   UnCheckbox,
 } from "@/components/icons";
 import BookmarkOff from "@/components/icons/BookmarkOff";
+import Image from "next/image";
 import { useRouter } from "next/router";
 import { useState } from "react";
 import styled from "styled-components";
@@ -92,7 +93,15 @@ const WhereSearch = () => {
         <FilterTab>
           <Map>
             <MapImage>
-              <img src="/images/sample4.png"></img>
+              <Image
+                src="/images/sample4.png"
+                alt="지도 이미지"
+                className="img"
+                style={{
+                  width: "100%",
+                  height: "300px",
+                }}
+              ></Image>
             </MapImage>
             <OpenMap>지도</OpenMap>
           </Map>
@@ -236,15 +245,17 @@ const WhereSearch = () => {
                     overflow: "hidden",
                   }}
                 >
-                  <img
+                  <Image
                     src="/images/sample1.png"
+                    alt="어디가지 검색결과 이미지"
                     style={{
                       width: "100%",
                       height: "100%",
                       objectFit: "cover",
                       objectPosition: "center 60%",
                     }}
-                  ></img>
+                    className="img"
+                  ></Image>
                 </div>
                 <WhereTitle>
                   <div className="name">망원한강공원</div>
@@ -265,15 +276,17 @@ const WhereSearch = () => {
                     overflow: "hidden",
                   }}
                 >
-                  <img
+                  <Image
                     src="/images/sample2.png"
+                    alt="어디가지 검색결과 이미지"
                     style={{
                       width: "100%",
                       height: "100%",
                       objectFit: "cover",
                       objectPosition: "center 60%",
                     }}
-                  ></img>
+                    className="img"
+                  ></Image>
                 </div>
                 <WhereTitle>
                   <div className="name">망원한강공원</div>
@@ -293,15 +306,17 @@ const WhereSearch = () => {
                     overflow: "hidden",
                   }}
                 >
-                  <img
+                  <Image
                     src="/images/sample3.png"
+                    alt="어디가지 검색결과 이미지"
                     style={{
                       width: "100%",
                       height: "100%",
                       objectFit: "cover",
                       objectPosition: "center 60%",
                     }}
-                  ></img>
+                    className="img"
+                  ></Image>
                 </div>
                 <WhereTitle>
                   <div className="name">뉴스뮤지엄</div>
@@ -318,12 +333,12 @@ const WhereSearch = () => {
                   push("/where/1");
                 }}
               >
-                <img
+                <Image
                   src="/images/sample1.png"
                   alt="where-card"
-                  width="140px"
-                  height="140px"
-                ></img>
+                  width={140}
+                  height={140}
+                ></Image>
                 <Infomation>
                   <Title>
                     <div>어노브 연남</div>
@@ -360,12 +375,12 @@ const WhereSearch = () => {
                   push("/where/1");
                 }}
               >
-                <img
+                <Image
                   src="/images/sample1.png"
                   alt="where-card"
-                  width="140px"
-                  height="140px"
-                ></img>
+                  width={140}
+                  height={140}
+                ></Image>
                 <Infomation>
                   <Title>
                     <div>어노브 연남</div>
@@ -402,12 +417,12 @@ const WhereSearch = () => {
                   push("/where/1");
                 }}
               >
-                <img
+                <Image
                   src="/images/sample1.png"
                   alt="where-card"
-                  width="140px"
-                  height="140px"
-                ></img>
+                  width={140}
+                  height={140}
+                ></Image>
                 <Infomation>
                   <Title>
                     <div>어노브 연남</div>
@@ -444,12 +459,12 @@ const WhereSearch = () => {
                   push("/where/1");
                 }}
               >
-                <img
+                <Image
                   src="/images/sample1.png"
                   alt="where-card"
-                  width="140px"
-                  height="140px"
-                ></img>
+                  width={140}
+                  height={140}
+                ></Image>
                 <Infomation>
                   <Title>
                     <div>어노브 연남</div>

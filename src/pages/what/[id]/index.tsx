@@ -1,4 +1,5 @@
 import Container from "@/components/Container";
+import NaverMap from "@/components/Map/NaverMap";
 import {
   Cafe,
   CopyAddress,
@@ -8,164 +9,380 @@ import {
   Location,
   ReveiwPencil,
 } from "@/components/icons";
+import useGetWhatDetailPost from "@/hooks/what/detail/useGetWhatDetailPost";
+import Image from "next/image";
+import { useRouter } from "next/router";
 import CopyToClipboard from "react-copy-to-clipboard";
 import styled from "styled-components";
 
 const WhatDetail = () => {
-  const textToCopy = "서울 마포구 동교로 248-1 2층";
+  const { query } = useRouter();
+  console.log({ query });
+  const postId = query?.id !== undefined ? String(query.id) : undefined;
+
+  const data = useGetWhatDetailPost(postId);
+
+  const { title, restaurant, cafe, leisure } = data || {};
+  //소수점 삽입 위한 로직
+  const convertrestaurantLat = parseFloat(
+    restaurant?.restaurantLat / 10000000
+  ).toFixed(7);
+  const convertrestaurantLng = parseFloat(
+    restaurant?.restaurantLng / 10000000
+  ).toFixed(7);
+
+  //지도에 다중마커 표시
+  const multiMarkers = [
+    { lat: restaurant?.restaurantLat, lng: restaurant?.restaurantLng },
+    { lat: cafe?.cafeLat, lng: cafe?.cafeLng },
+    { lat: leisure?.leisureLat, lng: leisure?.leisureLng },
+  ];
+
+  //지번주소 복사
+  const restaurantAddressToCopy = restaurant?.restaurantAddress;
+  const cafeAddressToCopy = cafe?.cafeAddress;
+  const leisureAddressToCopy = leisure?.leisureAddress;
+  //도로명주소 복사
+  const restaurantRoadAddressToCopy = restaurant?.restaurantRoadAddress;
+  const cafeRoadAddressToCopy = cafe?.cafeRoadAddress;
+  const leisureRoadAddressToCopy = leisure?.leisureRoadAddress;
+
   const handleCopy = () => {
     alert("복사 완료");
   };
-
+  if (!data) {
+    return <div>로딩중...</div>;
+  }
   return (
     <Container>
-      <WrapCon>
-        <MainTitle>아노브 연남 | 목화씨라운지 | 망원한강공원 데이트</MainTitle>
-        <WrapWriteInfo>
-          <Writer>
-            <div className="profileImg">
-              <img src="/images/sample5.png" alt="profile"></img>
-            </div>
-            나무늘보 | 2023.10.25
-          </Writer>
-          <EditBtn>
-            <div>수정</div>|<div>삭제</div>
-          </EditBtn>
-        </WrapWriteInfo>
-        <WrapReviewCard>
-          <WherePCCard>
-            <Infomation>
-              <Title>
-                <Food />
-                <div>어노브 연남</div>
-              </Title>
-              <Content>
-                <WrapLocation>
-                  <Road>
-                    <div>
-                      <Location />
-                    </div>
-                    <div>{textToCopy}</div>
-                    <Copy>
-                      <CopyToClipboard text={textToCopy} onCopy={handleCopy}>
-                        <div className="copyIcon">
-                          <CopyAddress />
-                        </div>
-                      </CopyToClipboard>
-                      <CopyToClipboard text={textToCopy} onCopy={handleCopy}>
-                        <div>주소복사</div>
-                      </CopyToClipboard>
-                    </Copy>
-                  </Road>
-                  <div className="street">
-                    <span>지번</span>연남동 228-48
-                  </div>
-                </WrapLocation>
-                <WrapHashTag>
-                  <div className="icon">
-                    <HashTag />
-                  </div>
-                  <Tag>
-                    <div>모던한</div>
-                    <div>연인과</div>
-                    <div>깔끔한</div>
-                  </Tag>
-                </WrapHashTag>
-                <WhatDetailImg>
-                  <img src="/images/sample1.png"></img>
-                  <img src="/images/sample1.png"></img>
-                  <img src="/images/sample1.png"></img>
-                </WhatDetailImg>
-                <Comment>
-                  <ReveiwPencil />
-                  <div>트러플피자 존맛탱임 꼭 드셈</div>
-                </Comment>
-              </Content>
-            </Infomation>
-          </WherePCCard>
-          <WherePCCard>
-            <Infomation>
-              <Title>
-                <Cafe />
-                <div>목화씨라운지</div>
-              </Title>
-              <Content>
-                <WrapLocation>
-                  <Road>
-                    <div>
-                      <Location />
-                    </div>
-                    <div>서울 마포구 동교로 248-1 2층</div>
-                  </Road>
-                  <div className="street">
-                    <span>지번</span>연남동 228-48
-                  </div>
-                </WrapLocation>
+      {data && (
+        <WrapCon>
+          <MainTitle>{title}</MainTitle>
+          <WrapWriteInfo>
+            <Writer>
+              <div className="profileImg">
+                <Image
+                  src="/images/sample5.png"
+                  alt="profile"
+                  width={20}
+                  height={20}
+                ></Image>
+              </div>
+              나무늘보 | 2023.10.25
+            </Writer>
 
-                <WrapHashTag>
-                  <div className="icon">
-                    <HashTag />
-                  </div>
-                  <Tag>
-                    <div>조용한</div>
-                    <div>혼자서</div>
-                  </Tag>
-                </WrapHashTag>
-                <WhatDetailImg>
-                  <img src="/images/sample2.png"></img>
-                  <img src="/images/sample2.png"></img>
-                  <img src="/images/sample2.png"></img>
-                </WhatDetailImg>
-                <Comment>
-                  <ReveiwPencil />
-                  <div>푸딩 존맛탱이구 평화로워서 책읽기도 너무 좋음</div>
-                </Comment>
-              </Content>
-            </Infomation>
-          </WherePCCard>
-          <WherePCCard>
-            <Infomation>
-              <Title>
-                <Hobby />
-                <div>OGOC 공방</div>
-              </Title>
-              <Content className="lastCon">
-                <WrapLocation>
-                  <Road>
-                    <div>
-                      <Location />
-                    </div>
-                    <div>서울 마포구 동교로 248-1 2층</div>
-                  </Road>
-                  <div className="street">
-                    <span>지번</span>연남동 228-48
-                  </div>
-                </WrapLocation>
-                <WrapHashTag>
-                  <div className="icon">
-                    <HashTag />
-                  </div>
-                  <Tag>
-                    <div>키치한</div>
-                    <div>기념일</div>
-                    <div>연인과</div>
-                    <div>친구와</div>
-                  </Tag>
-                </WrapHashTag>
-                <WhatDetailImg>
-                  <img src="/images/sample3.png"></img>
-                  <img src="/images/sample3.png"></img>
-                  <img src="/images/sample3.png"></img>
-                </WhatDetailImg>
-                <Comment>
-                  <ReveiwPencil />
-                  <div>연인이나 친구와 잊지못할 추억 남기기 딱 좋음~</div>
-                </Comment>
-              </Content>
-            </Infomation>
-          </WherePCCard>
-        </WrapReviewCard>
-      </WrapCon>
+            <EditBtn>
+              <div>수정</div>|<div>삭제</div>
+            </EditBtn>
+          </WrapWriteInfo>
+          {/* map */}
+          <Map>
+            {/* 우선 음식점 위치 보여주기 */}
+            <NaverMap markers={multiMarkers} />
+            {/* <NaverMapComponent /> */}
+            {/* <NavermapsProvider
+              ncpClientId="d806azldce"
+              // or finClientId, govClientId
+            ></NavermapsProvider> */}
+
+            {/* <img src="/images/sample8.png" alt="상세 위치 정보 지도"></img> */}
+          </Map>
+
+          <WrapReviewCard>
+            {restaurant && (
+              <WherePCCard>
+                <Infomation>
+                  <Title>
+                    <Food />
+                    <div>{restaurant.restaurantName}</div>
+                  </Title>
+                  <Content>
+                    <WrapLocation>
+                      <Road>
+                        <div>
+                          <Location />
+                        </div>
+                        <div>{restaurantRoadAddressToCopy}</div>
+                        <Copy>
+                          <CopyToClipboard
+                            text={restaurantRoadAddressToCopy}
+                            onCopy={handleCopy}
+                          >
+                            <div className="copyIcon">
+                              <CopyAddress />
+                            </div>
+                          </CopyToClipboard>
+                          <CopyToClipboard
+                            text={restaurantRoadAddressToCopy}
+                            onCopy={handleCopy}
+                          >
+                            <div>주소복사</div>
+                          </CopyToClipboard>
+                        </Copy>
+                      </Road>
+                      <Address>
+                        <span>지번</span>
+                        <div className="info">
+                          <div>{restaurant.restaurantAddress}</div>
+                          <Copy>
+                            <CopyToClipboard
+                              text={restaurantAddressToCopy}
+                              onCopy={handleCopy}
+                            >
+                              <div className="copyIcon">
+                                <CopyAddress />
+                              </div>
+                            </CopyToClipboard>
+                            <CopyToClipboard
+                              text={restaurantAddressToCopy}
+                              onCopy={handleCopy}
+                            >
+                              <div>주소복사</div>
+                            </CopyToClipboard>
+                          </Copy>
+                        </div>
+                      </Address>
+                    </WrapLocation>
+                    <WrapHashTag>
+                      <div className="icon">
+                        <HashTag />
+                      </div>
+                      {restaurant?.restaurantTags?.map((item) => {
+                        return (
+                          <Tag key={item.length}>
+                            <div>{item}</div>
+                          </Tag>
+                        );
+                      })}
+                    </WrapHashTag>
+                    <WhatDetailImg>
+                      <div>
+                        <Image
+                          src="/images/sample1.png"
+                          alt="이미지1"
+                          className="img"
+                        ></Image>{" "}
+                      </div>
+                      <div>
+                        <Image
+                          src="/images/sample1.png"
+                          alt="이미지1"
+                          className="img"
+                        ></Image>{" "}
+                      </div>
+                      <div>
+                        <Image
+                          src="/images/sample1.png"
+                          alt="이미지1"
+                          className="img"
+                        ></Image>{" "}
+                      </div>
+                    </WhatDetailImg>
+                    <Comment>
+                      <ReveiwPencil />
+                      <div>{restaurant.restaurantComment}</div>
+                    </Comment>
+                  </Content>
+                </Infomation>
+              </WherePCCard>
+            )}
+            {cafe && (
+              <WherePCCard>
+                <Infomation>
+                  <Title>
+                    <Cafe />
+                    <div>{cafe?.cafeName}</div>
+                  </Title>
+                  <Content>
+                    <WrapLocation>
+                      <Road>
+                        <div>
+                          <Location />
+                        </div>
+                        <div>{cafeRoadAddressToCopy}</div>
+                        <Copy>
+                          <CopyToClipboard
+                            text={cafeRoadAddressToCopy}
+                            onCopy={handleCopy}
+                          >
+                            <div className="copyIcon">
+                              <CopyAddress />
+                            </div>
+                          </CopyToClipboard>
+                          <CopyToClipboard
+                            text={cafeRoadAddressToCopy}
+                            onCopy={handleCopy}
+                          >
+                            <div>주소복사</div>
+                          </CopyToClipboard>
+                        </Copy>
+                      </Road>
+                      <Address>
+                        <span>지번</span>
+                        <div className="info">
+                          <div>{cafe.cafeAddress}</div>
+                          <Copy>
+                            <CopyToClipboard
+                              text={cafeAddressToCopy}
+                              onCopy={handleCopy}
+                            >
+                              <div className="copyIcon">
+                                <CopyAddress />
+                              </div>
+                            </CopyToClipboard>
+                            <CopyToClipboard
+                              text={cafeAddressToCopy}
+                              onCopy={handleCopy}
+                            >
+                              <div>주소복사</div>
+                            </CopyToClipboard>
+                          </Copy>
+                        </div>
+                      </Address>
+                    </WrapLocation>
+                    <WrapHashTag>
+                      <div className="icon">
+                        <HashTag />
+                      </div>
+                      {cafe?.cafeTags?.map((item) => {
+                        return (
+                          <Tag key={item.length}>
+                            <div>{item}</div>
+                          </Tag>
+                        );
+                      })}
+                    </WrapHashTag>
+                    <WhatDetailImg>
+                      <div>
+                        <Image
+                          src="/images/sample1.png"
+                          alt="이미지1"
+                          className="img"
+                        ></Image>{" "}
+                      </div>
+                      <div>
+                        <Image
+                          src="/images/sample1.png"
+                          alt="이미지1"
+                          className="img"
+                        ></Image>{" "}
+                      </div>
+                      <div>
+                        <Image
+                          src="/images/sample1.png"
+                          alt="이미지1"
+                          className="img"
+                        ></Image>{" "}
+                      </div>
+                    </WhatDetailImg>
+                    <Comment>
+                      <ReveiwPencil />
+                      <div>{cafe.cafeComment}</div>
+                    </Comment>
+                  </Content>
+                </Infomation>
+              </WherePCCard>
+            )}
+            {leisure && (
+              <WherePCCard>
+                <Infomation>
+                  <Title>
+                    <Hobby />
+                    <div>{leisure?.leisureName}</div>
+                  </Title>
+                  <Content className="lastCon">
+                    <WrapLocation>
+                      <Road>
+                        <div>
+                          <Location />
+                        </div>
+                        <div>{leisureRoadAddressToCopy}</div>
+                        <Copy>
+                          <CopyToClipboard
+                            text={leisureRoadAddressToCopy}
+                            onCopy={handleCopy}
+                          >
+                            <div className="copyIcon">
+                              <CopyAddress />
+                            </div>
+                          </CopyToClipboard>
+                          <CopyToClipboard
+                            text={leisureRoadAddressToCopy}
+                            onCopy={handleCopy}
+                          >
+                            <div>주소복사</div>
+                          </CopyToClipboard>
+                        </Copy>
+                      </Road>
+                      <Address>
+                        <span>지번</span>
+                        <div className="info">
+                          <div>{leisure.leisureAddress}</div>
+                          <Copy>
+                            <CopyToClipboard
+                              text={leisureAddressToCopy}
+                              onCopy={handleCopy}
+                            >
+                              <div className="copyIcon">
+                                <CopyAddress />
+                              </div>
+                            </CopyToClipboard>
+                            <CopyToClipboard
+                              text={leisureAddressToCopy}
+                              onCopy={handleCopy}
+                            >
+                              <div>주소복사</div>
+                            </CopyToClipboard>
+                          </Copy>
+                        </div>
+                      </Address>
+                    </WrapLocation>
+                    <WrapHashTag>
+                      <div className="icon">
+                        <HashTag />
+                      </div>
+                      {leisure?.leisureTags?.map((item) => {
+                        return (
+                          <Tag key={item.length}>
+                            <div>{item}</div>
+                          </Tag>
+                        );
+                      })}
+                    </WrapHashTag>
+                    <WhatDetailImg>
+                      <div>
+                        <Image
+                          src="/images/sample1.png"
+                          alt="이미지1"
+                          className="img"
+                        ></Image>{" "}
+                      </div>
+                      <div>
+                        <Image
+                          src="/images/sample1.png"
+                          alt="이미지1"
+                          className="img"
+                        ></Image>{" "}
+                      </div>
+                      <div>
+                        <Image
+                          src="/images/sample1.png"
+                          alt="이미지1"
+                          className="img"
+                        ></Image>{" "}
+                      </div>
+                    </WhatDetailImg>
+                    <Comment>
+                      <ReveiwPencil />
+                      <div>{leisure.leisureComment}</div>
+                    </Comment>
+                  </Content>
+                </Infomation>
+              </WherePCCard>
+            )}
+          </WrapReviewCard>
+        </WrapCon>
+      )}
     </Container>
   );
 };
@@ -264,20 +481,26 @@ const Content = styled.div`
   border-left: 4px dashed #ffc700;
   box-sizing: border-box;
 `;
-const WrapLocation = styled.div`
-  .street {
-    padding-left: 23px;
-    span {
-      padding-right: 10px;
-      color: #8eb2f8;
-    }
-  }
-`;
 const Road = styled.div`
   display: flex;
   gap: 8px;
   padding-bottom: 5px;
 `;
+const Address = styled.div`
+  display: flex;
+  padding-left: 23px;
+  .info {
+    display: flex;
+    gap: 8px;
+  }
+`;
+const WrapLocation = styled.div`
+  span {
+    padding-right: 10px;
+    color: #8eb2f8;
+  }
+`;
+
 const Copy = styled.div`
   display: flex;
   gap: 3px;
@@ -317,13 +540,13 @@ const WhatDetailImg = styled.div`
   display: flex;
   justify-content: space-between;
   gap: 10px;
-  img {
+  div {
     width: calc(33.33%);
     box-sizing: border-box;
     aspect-ratio: 1.3 / 1;
     object-fit: cover;
   }
-  img:nth-of-type(1) {
+  div:nth-of-type(1) {
     border-left: none;
   }
   @media (max-width: 600px) {
@@ -347,4 +570,13 @@ const Comment = styled.div`
   font-size: 14px;
   padding-bottom: 10px;
   border-bottom: 1px dashed #000;
+`;
+const Map = styled.div`
+  margin-top: 16px;
+  img {
+    width: 100%;
+  }
+  @media (max-width: 600px) {
+    display: none;
+  }
 `;
