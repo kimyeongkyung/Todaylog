@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
 
+interface WherePostDataType {}
+
 const useGetWherePosts = () => {
   const [postData, setPostData] = useState(null);
 
@@ -14,7 +16,7 @@ const useGetWherePosts = () => {
 
         const data = await response.json();
         setPostData(data);
-      } catch (error) {
+      } catch (error: any) {
         console.error("Error using posts:", error.message);
       }
     };

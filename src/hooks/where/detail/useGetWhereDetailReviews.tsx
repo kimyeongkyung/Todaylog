@@ -36,7 +36,7 @@ const useGetWhereDetailReviews = (
 
   if (isError) {
     // You can handle error state here
-    console.error("Error using posts:", error.message);
+    console.error("Error using posts");
     return null;
   }
 

@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import { useQuery } from "react-query";
 
+interface PostData {}
+
 const useGetWhatDetailPost = (postId: string | undefined) => {
   const fetchPostData = async () => {
     const response = await fetch(
@@ -19,7 +21,7 @@ const useGetWhatDetailPost = (postId: string | undefined) => {
     error,
     isError,
     isLoading,
-  } = useQuery(["post", postId], fetchPostData, {
+  } = useQuery<PostData>(["post", postId], fetchPostData, {
     enabled: postId !== undefined, // postId가 유효한 값일 때만 데이터 호출
     staleTime: 60000, // 데이터 불러온지 1분 경과 시 새 데이터 호출
   });
@@ -31,7 +33,8 @@ const useGetWhatDetailPost = (postId: string | undefined) => {
 
   if (isError) {
     // You can handle error state here
-    console.error("Error using posts:", error.message);
+    console.error("Error using posts");
+
     return null;
   }
 

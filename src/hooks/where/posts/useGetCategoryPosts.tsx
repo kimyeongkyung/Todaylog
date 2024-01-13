@@ -43,7 +43,7 @@ const useGetCategoryPosts = (category: string) => {
 
         const { data } = await response.json();
         setCategoryData(data);
-      } catch (error) {
+      } catch (error: any) {
         console.error(`Error using ${encodedCategory} posts:`, error.message);
       }
     };

@@ -14,8 +14,8 @@ const useGetWhatPosts = () => {
 
         const data = await response.json();
         setPostData(data);
-      } catch (error) {
-        console.error("Error using posts:", error.message);
+      } catch {
+        console.error("Error using posts:");
       }
     };
 
