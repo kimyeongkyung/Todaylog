@@ -15,12 +15,15 @@ import {
   SmallHeart,
   UnCheckbox,
 } from "@/components/icons";
+import useGetCategoryPosts from "@/hooks/where/posts/useGetCategoryPosts";
+import useGetWherePosts from "@/hooks/where/posts/useGetWherePosts";
 import Image from "next/image";
 import { useRouter } from "next/router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import styled from "styled-components";
 
-const Where = () => {
+const Where = ({ isLogin }: { isLogin?: boolean }) => {
+  console.log(isLogin);
   //필터 모달
   const [openFilter, setOpenFilter] = useState(false);
   //비로그인 상태에서 상세 진입 시 로그인 확인 모달
@@ -37,7 +40,10 @@ const Where = () => {
   const [clickConceptBtn, setClickConceptBtn] = useState<number[]>([]);
   const [clickThemeBtn, setClickThemeBtn] = useState<number[]>([]);
   const [clickWeatherBtn, setClickWeatherBtn] = useState<number[]>([]);
-
+  const allData = useGetWherePosts();
+  console.log(allData);
+  const categoryData = useGetCategoryPosts(activeKeyword);
+  console.log(categoryData);
   const conceptExample = [
     "모던한",
     "감성적인",
@@ -86,6 +92,10 @@ const Where = () => {
     "겨울",
   ];
   const { push } = useRouter();
+
+  const handleCategoryClick = (category: string) => {
+    setActiveKeyword(category);
+  };
 
   return (
     <>
@@ -374,12 +384,13 @@ const Where = () => {
                   </div>
                 </div>
               </PCConceptFilter>
+
               <SearchBtn
                 onClick={() => {
                   push("/where/search");
                 }}
               >
-                검색하기
+                <div>검색하기</div>
               </SearchBtn>
             </PcFilter>
           </SearchFilter>
@@ -388,11 +399,12 @@ const Where = () => {
             <HotplaceCardList>
               <HotplaceCard>
                 <div>
-                  <img
+                  <Image
                     src="/images/sample1.png"
-                    width="68px"
-                    height="68px"
-                  ></img>
+                    alt="요즘 핫한 장소 이미지"
+                    width={68}
+                    height={68}
+                  ></Image>
                 </div>
                 <HotplaceText>
                   <p>카페</p>
@@ -405,11 +417,12 @@ const Where = () => {
               </HotplaceCard>
               <HotplaceCard>
                 <div>
-                  <img
+                  <Image
                     src="/images/sample1.png"
-                    width="68px"
-                    height="68px"
-                  ></img>
+                    alt="요즘 핫한 장소 이미지"
+                    width={68}
+                    height={68}
+                  ></Image>
                 </div>
                 <HotplaceText>
                   <p>카페</p>
@@ -422,11 +435,12 @@ const Where = () => {
               </HotplaceCard>
               <HotplaceCard>
                 <div>
-                  <img
+                  <Image
                     src="/images/sample1.png"
-                    width="68px"
-                    height="68px"
-                  ></img>
+                    alt="요즘 핫한 장소 이미지"
+                    width={68}
+                    height={68}
+                  ></Image>
                 </div>
                 <HotplaceText>
                   <p>카페</p>
@@ -439,11 +453,12 @@ const Where = () => {
               </HotplaceCard>
               <HotplaceCard>
                 <div>
-                  <img
+                  <Image
                     src="/images/sample1.png"
-                    width="68px"
-                    height="68px"
-                  ></img>
+                    alt="요즘 핫한 장소 이미지"
+                    width={68}
+                    height={68}
+                  ></Image>
                 </div>
                 <HotplaceText>
                   <p>카페</p>
@@ -456,11 +471,12 @@ const Where = () => {
               </HotplaceCard>
               <HotplaceCard>
                 <div>
-                  <img
+                  <Image
                     src="/images/sample1.png"
-                    width="68px"
-                    height="68px"
-                  ></img>
+                    alt="요즘 핫한 장소 이미지"
+                    width={68}
+                    height={68}
+                  ></Image>
                 </div>
                 <HotplaceText>
                   <p>카페</p>
@@ -477,7 +493,7 @@ const Where = () => {
             <KeywordTab>
               <div
                 onClick={() => {
-                  setActiveKeyword("전체");
+                  handleCategoryClick("전체");
                 }}
                 style={{
                   fontWeight: activeKeyword === "전체" ? "bold" : "normal",
@@ -488,7 +504,7 @@ const Where = () => {
               </div>
               <div
                 onClick={() => {
-                  setActiveKeyword("음식점");
+                  handleCategoryClick("음식점");
                 }}
                 style={{
                   fontWeight: activeKeyword === "음식점" ? "bold" : "normal",
@@ -499,7 +515,7 @@ const Where = () => {
               </div>
               <div
                 onClick={() => {
-                  setActiveKeyword("카페");
+                  handleCategoryClick("카페");
                 }}
                 style={{
                   fontWeight: activeKeyword === "카페" ? "bold" : "normal",
@@ -510,7 +526,7 @@ const Where = () => {
               </div>
               <div
                 onClick={() => {
-                  setActiveKeyword("문화/여가");
+                  handleCategoryClick("문화/여가");
                 }}
                 style={{
                   fontWeight: activeKeyword === "문화/여가" ? "bold" : "normal",
@@ -523,450 +539,235 @@ const Where = () => {
 
             <Line></Line>
             {/* 전체 */}
-            {activeKeyword === "전체" && (
+            {activeKeyword === "전체" && allData && (
               <CultureCardList>
-                <WhereCard
-                  onClick={() => {
-                    setOpenNotLogin(true);
-                  }}
-                >
-                  <div
-                    style={{
-                      position: "relative",
-                      width: "100%",
-                      height: "160px",
-                      overflow: "hidden",
-                    }}
-                  >
-                    <img
-                      src="/images/sample1.png"
-                      style={{
-                        width: "100%",
-                        height: "100%",
-                        objectFit: "cover",
-                        objectPosition: "center 60%",
+                {allData?.location.map((data) => {
+                  console.log(data.images);
+                  const addressParts = data?.address?.split(/[\s,]+/);
+
+                  // 필요한 부분만 선택
+                  const shortenedAddress = addressParts?.slice(1, 3).join(" ");
+
+                  return (
+                    <WhereCard
+                      key={data.lat}
+                      onClick={() => {
+                        push(
+                          `/where/${data?.placeId}?category=${data?.category}&lat=${data?.lat}&lng=${data?.lng}`
+                        );
                       }}
-                    ></img>
-                  </div>
-                  <WhereTitle>
-                    <div className="name">망원한강공원</div>
-                    <div className="address">마포구 망원동</div>
-                  </WhereTitle>
-                </WhereCard>
-                <WhereCard
-                  onClick={() => {
-                    push("/where/1");
-                    // setOpenNotLogin(true);
-                  }}
-                >
-                  <div
-                    style={{
-                      position: "relative",
-                      width: "100%",
-                      height: "160px",
-                      overflow: "hidden",
-                    }}
-                  >
-                    <img
-                      src="/images/sample2.png"
-                      style={{
-                        width: "100%",
-                        height: "100%",
-                        objectFit: "cover",
-                        objectPosition: "center 60%",
-                      }}
-                    ></img>
-                  </div>
-                  <WhereTitle>
-                    <div className="name">망원한강공원</div>
-                    <div className="address">마포구 망원동</div>
-                  </WhereTitle>
-                </WhereCard>
-                <WhereCard
-                  onClick={() => {
-                    setOpenNotLogin(true);
-                  }}
-                >
-                  <div
-                    style={{
-                      position: "relative",
-                      width: "100%",
-                      height: "160px",
-                      overflow: "hidden",
-                    }}
-                  >
-                    <img
-                      src="/images/sample3.png"
-                      style={{
-                        width: "100%",
-                        height: "100%",
-                        objectFit: "cover",
-                        objectPosition: "center 60%",
-                      }}
-                    ></img>
-                  </div>
-                  <WhereTitle>
-                    <div className="name">뉴스뮤지엄</div>
-                    <div className="address">마포구 연남동</div>
-                  </WhereTitle>
-                </WhereCard>
+                    >
+                      <div
+                        style={{
+                          position: "relative",
+                          width: "100%",
+                          height: "160px",
+                          overflow: "hidden",
+                        }}
+                      >
+                        {data?.images.length > 0 && (
+                          <Image
+                            src={data?.images}
+                            alt="First Image"
+                            style={{
+                              objectFit: "cover",
+                              objectPosition: "center 60%",
+                            }}
+                            width={200}
+                            height={200}
+                          />
+                        )}
+                      </div>
+                      <WhereTitle>
+                        <div className="name">{data.placeName}</div>
+                        <div className="address">{shortenedAddress}</div>
+                      </WhereTitle>
+                    </WhereCard>
+                  );
+                })}
               </CultureCardList>
             )}
             {/* 음식점 */}
             {activeKeyword === "음식점" && (
-              <FoodCardList>
-                <WhereCard
-                  onClick={() => {
-                    setOpenNotLogin(true);
-                  }}
-                >
-                  <div
-                    style={{
-                      position: "relative",
-                      width: "100%",
-                      height: "160px",
-                      overflow: "hidden",
-                    }}
-                  >
-                    <img
-                      src="/images/sample1.png"
-                      style={{
-                        width: "100%",
-                        height: "100%",
-                        objectFit: "cover",
-                        objectPosition: "center 60%",
-                      }}
-                    ></img>
-                  </div>
-                  <WhereTitle>
-                    <div className="name">아노브 연남</div>
-                    <div className="address">마포구 연남동</div>
-                  </WhereTitle>
-                </WhereCard>
-                <WhereCard
-                  onClick={() => {
-                    setOpenNotLogin(true);
-                  }}
-                >
-                  <div
-                    style={{
-                      position: "relative",
-                      width: "100%",
-                      height: "160px",
-                      overflow: "hidden",
-                    }}
-                  >
-                    <img
-                      src="/images/sample1.png"
-                      style={{
-                        width: "100%",
-                        height: "100%",
-                        objectFit: "cover",
-                        objectPosition: "center 60%",
-                      }}
-                    ></img>
-                  </div>
-                  <WhereTitle>
-                    <div className="name">아노브 연남</div>
-                    <div className="address">마포구 연남동</div>
-                  </WhereTitle>
-                </WhereCard>
-                <WhereCard
-                  onClick={() => {
-                    setOpenNotLogin(true);
-                  }}
-                >
-                  <div
-                    style={{
-                      position: "relative",
-                      width: "100%",
-                      height: "160px",
-                      overflow: "hidden",
-                    }}
-                  >
-                    <img
-                      src="/images/sample1.png"
-                      style={{
-                        width: "100%",
-                        height: "100%",
-                        objectFit: "cover",
-                        objectPosition: "center 60%",
-                      }}
-                    ></img>
-                  </div>
-                  <WhereTitle>
-                    <div className="name">아노브 연남</div>
-                    <div className="address">마포구 연남동</div>
-                  </WhereTitle>
-                </WhereCard>
-                <WhereCard
-                  onClick={() => {
-                    setOpenNotLogin(true);
-                  }}
-                >
-                  <div
-                    style={{
-                      position: "relative",
-                      width: "100%",
-                      height: "160px",
-                      overflow: "hidden",
-                    }}
-                  >
-                    <img
-                      src="/images/sample1.png"
-                      style={{
-                        width: "100%",
-                        height: "100%",
-                        objectFit: "cover",
-                        objectPosition: "center 60%",
-                      }}
-                    ></img>
-                  </div>
-                  <WhereTitle>
-                    <div className="name">아노브 연남</div>
-                    <div className="address">마포구 연남동</div>
-                  </WhereTitle>
-                </WhereCard>
-                <WhereCard
-                  onClick={() => {
-                    setOpenNotLogin(true);
-                  }}
-                >
-                  <div
-                    style={{
-                      position: "relative",
-                      width: "100%",
-                      height: "160px",
-                      overflow: "hidden",
-                    }}
-                  >
-                    <img
-                      src="/images/sample1.png"
-                      style={{
-                        width: "100%",
-                        height: "100%",
-                        objectFit: "cover",
-                        objectPosition: "center 60%",
-                      }}
-                    ></img>
-                  </div>
-                  <WhereTitle>
-                    <div className="name">아노브 연남</div>
-                    <div className="address">마포구 연남동</div>
-                  </WhereTitle>
-                </WhereCard>
-                <WhereCard
-                  onClick={() => {
-                    setOpenNotLogin(true);
-                  }}
-                >
-                  <div
-                    style={{
-                      position: "relative",
-                      width: "100%",
-                      height: "160px",
-                      overflow: "hidden",
-                    }}
-                  >
-                    <img
-                      src="/images/sample1.png"
-                      style={{
-                        width: "100%",
-                        height: "100%",
-                        objectFit: "cover",
-                        objectPosition: "center 60%",
-                      }}
-                    ></img>
-                  </div>
-                  <WhereTitle>
-                    <div className="name">아노브 연남</div>
-                    <div className="address">마포구 연남동</div>
-                  </WhereTitle>
-                </WhereCard>
-              </FoodCardList>
+              <>
+                {categoryData?.length ? (
+                  <FoodCardList>
+                    {categoryData.map((data) => {
+                      console.log(data.images[0]);
+                      const addressParts = data.address.split(/[\s,]+/);
+
+                      // 필요한 부분만 선택
+                      const shortenedAddress = addressParts
+                        .slice(1, 3)
+                        .join(" ");
+
+                      return (
+                        <WhereCard
+                          key={data?.lng}
+                          onClick={() => {
+                            push(
+                              `/where/${data?.placeId}?category=restaurant&lat=${data?.lat}&lng=${data?.lng}`
+                            );
+                          }}
+                        >
+                          <div
+                            style={{
+                              position: "relative",
+                              width: "100%",
+                              height: "160px",
+                              overflow: "hidden",
+                            }}
+                          >
+                            {data?.images.length > 0 && (
+                              <Image
+                                src={data?.images[0]}
+                                alt="음식점 탭 이미지"
+                                style={{
+                                  width: "100%",
+                                  height: "100%",
+                                  objectFit: "cover",
+                                  objectPosition: "center 60%",
+                                }}
+                                className="img"
+                                width={200}
+                                height={200}
+                              />
+                            )}
+                          </div>
+                          <WhereTitle>
+                            <div className="name">{data?.placeName}</div>
+                            <div className="address">{shortenedAddress}</div>
+                          </WhereTitle>
+                        </WhereCard>
+                      );
+                    })}
+                  </FoodCardList>
+                ) : (
+                  <div>리스트가 없습니다.</div>
+                )}
+              </>
             )}
             {/* 카페 */}
             {activeKeyword === "카페" && (
-              <CafeCardList>
-                <WhereCard
-                  onClick={() => {
-                    setOpenNotLogin(true);
-                  }}
-                >
-                  <div
-                    style={{
-                      position: "relative",
-                      width: "100%",
-                      height: "160px",
-                      overflow: "hidden",
-                    }}
-                  >
-                    <img
-                      src="/images/sample2.png"
-                      style={{
-                        width: "100%",
-                        height: "100%",
-                        objectFit: "cover",
-                        objectPosition: "center 80%",
-                      }}
-                    ></img>
-                  </div>
-                  <WhereTitle>
-                    <div className="name">목화씨라운지</div>
-                    <div className="address">마포구 합정동</div>
-                  </WhereTitle>
-                </WhereCard>
-                <WhereCard
-                  onClick={() => {
-                    setOpenNotLogin(true);
-                  }}
-                >
-                  <div
-                    style={{
-                      position: "relative",
-                      width: "100%",
-                      height: "160px",
-                      overflow: "hidden",
-                    }}
-                  >
-                    <img
-                      src="/images/sample2.png"
-                      style={{
-                        width: "100%",
-                        height: "100%",
-                        objectFit: "cover",
-                        objectPosition: "center 80%",
-                      }}
-                    ></img>
-                  </div>
-                  <WhereTitle>
-                    <div className="name">목화씨라운지</div>
-                    <div className="address">마포구 합정동</div>
-                  </WhereTitle>
-                </WhereCard>
-                <WhereCard
-                  onClick={() => {
-                    setOpenNotLogin(true);
-                  }}
-                >
-                  <div
-                    style={{
-                      position: "relative",
-                      width: "100%",
-                      height: "160px",
-                      overflow: "hidden",
-                    }}
-                  >
-                    <img
-                      src="/images/sample2.png"
-                      style={{
-                        width: "100%",
-                        height: "100%",
-                        objectFit: "cover",
-                        objectPosition: "center 80%",
-                      }}
-                    ></img>
-                  </div>
-                  <WhereTitle>
-                    <div className="name">앤트러사이트</div>
-                    <div className="address">마포구 연남동</div>
-                  </WhereTitle>
-                </WhereCard>
-              </CafeCardList>
+              <>
+                {categoryData?.length ? (
+                  <CafeCardList>
+                    {categoryData.map((data) => {
+                      const addressParts = data.address.split(/[\s,]+/);
+
+                      // 필요한 부분만 선택
+                      const shortenedAddress = addressParts
+                        .slice(1, 3)
+                        .join(" ");
+
+                      return (
+                        <WhereCard
+                          key={data.id}
+                          onClick={() => {
+                            push(
+                              `/where/${data?.placeId}?category=cafe&lat=${data?.lat}&lng=${data?.lng}`
+                            );
+                          }}
+                        >
+                          <div
+                            style={{
+                              position: "relative",
+                              width: "100%",
+                              height: "160px",
+                              overflow: "hidden",
+                            }}
+                          >
+                            {data?.images.length > 0 && (
+                              <Image
+                                src={data?.images[0]}
+                                alt="키페 탭 이미지"
+                                style={{
+                                  width: "100%",
+                                  height: "100%",
+                                  objectFit: "cover",
+                                  objectPosition: "center 60%",
+                                }}
+                                className="img"
+                                width={200}
+                                height={200}
+                              />
+                            )}
+                          </div>
+                          <WhereTitle>
+                            <div className="name">{data?.placeName}</div>
+                            <div className="address">{shortenedAddress}</div>
+                          </WhereTitle>
+                        </WhereCard>
+                      );
+                    })}
+                  </CafeCardList>
+                ) : (
+                  <div>리스트가 없습니다.</div>
+                )}
+              </>
             )}
             {/* 문화/여가 */}
             {activeKeyword === "문화/여가" && (
-              <CultureCardList>
-                <WhereCard
-                  onClick={() => {
-                    setOpenNotLogin(true);
-                  }}
-                >
-                  <div
-                    style={{
-                      position: "relative",
-                      width: "100%",
-                      height: "160px",
-                      overflow: "hidden",
-                    }}
-                  >
-                    <img
-                      src="/images/sample3.png"
-                      style={{
-                        width: "100%",
-                        height: "100%",
-                        objectFit: "cover",
-                        objectPosition: "center 60%",
-                      }}
-                    ></img>
-                  </div>
-                  <WhereTitle>
-                    <div className="name">망원한강공원</div>
-                    <div className="address">마포구 망원동</div>
-                  </WhereTitle>
-                </WhereCard>
-                <WhereCard
-                  onClick={() => {
-                    setOpenNotLogin(true);
-                  }}
-                >
-                  <div
-                    style={{
-                      position: "relative",
-                      width: "100%",
-                      height: "160px",
-                      overflow: "hidden",
-                    }}
-                  >
-                    <img
-                      src="/images/sample3.png"
-                      style={{
-                        width: "100%",
-                        height: "100%",
-                        objectFit: "cover",
-                        objectPosition: "center 60%",
-                      }}
-                    ></img>
-                  </div>
-                  <WhereTitle>
-                    <div className="name">망원한강공원</div>
-                    <div className="address">마포구 망원동</div>
-                  </WhereTitle>
-                </WhereCard>
-                <WhereCard
-                  onClick={() => {
-                    setOpenNotLogin(true);
-                  }}
-                >
-                  <div
-                    style={{
-                      position: "relative",
-                      width: "100%",
-                      height: "160px",
-                      overflow: "hidden",
-                    }}
-                  >
-                    <img
-                      src="/images/sample3.png"
-                      style={{
-                        width: "100%",
-                        height: "100%",
-                        objectFit: "cover",
-                        objectPosition: "center 60%",
-                      }}
-                    ></img>
-                  </div>
-                  <WhereTitle>
-                    <div className="name">뉴스뮤지엄</div>
-                    <div className="address">마포구 연남동</div>
-                  </WhereTitle>
-                </WhereCard>
-              </CultureCardList>
+              <>
+                {categoryData?.length ? (
+                  <CultureCardList>
+                    {categoryData?.map((data) => {
+                      const addressParts = data.address.split(/[\s,]+/);
+
+                      // 필요한 부분만 선택
+                      const shortenedAddress = addressParts
+                        .slice(1, 3)
+                        .join(" ");
+                      return (
+                        <WhereCard
+                          key={data?.lat}
+                          onClick={() => {
+                            push(
+                              `/where/${data?.placeId}?category=leisure&lat=${data?.lat}&lng=${data?.lng}`
+                            );
+                          }}
+                        >
+                          <div
+                            style={{
+                              position: "relative",
+                              width: "100%",
+                              height: "160px",
+                              overflow: "hidden",
+                            }}
+                          >
+                            {data?.images.length > 0 && (
+                              <Image
+                                src={data?.images[0]}
+                                alt="문화 여가 탭 이미지"
+                                style={{
+                                  width: "100%",
+                                  height: "100%",
+                                  objectFit: "cover",
+                                  objectPosition: "center 60%",
+                                }}
+                                width={200}
+                                height={200}
+                                className="img"
+                              />
+                            )}
+                          </div>
+                          <WhereTitle>
+                            <div className="name">{data.placeName}</div>
+                            <div className="address">{shortenedAddress}</div>
+                          </WhereTitle>
+                        </WhereCard>
+                      );
+                    })}
+                  </CultureCardList>
+                ) : (
+                  <div>리스트가 없습니다.</div>
+                )}
+              </>
             )}
           </WrapWhereList>
         </WrapCon>
       </Container>
-      {openNotLogin && (
+      {isLogin === false && (
         <LoginCheckModal
           setIsOpen={(value: boolean) => setOpenNotLogin(value)} // 모달에서 모달을 닫을 때 사용할 콜백
         />
@@ -1074,24 +875,30 @@ const CheckBtn = styled.div`
 `;
 
 const SearchBtn = styled.div`
-  margin: 16px auto 0 auto;
-  width: 159px;
+  background-color: #fff;
+  width: 180px;
   height: 38px;
-  border-radius: 5px;
-  color: #fff;
-  justify-content: center;
-  align-items: center;
-  gap: 10px;
-  display: flex;
-  background-color: #000;
-  font-size: 13px;
-  cursor: pointer;
   &:hover {
     background-color: #e0ae00;
   }
   position: absolute;
   left: 50%;
-  transform: translate(-50%, -50%);
+  transform: translate(-50%, -20%);
+  margin: 16px auto 0 auto;
+  div {
+    margin: auto;
+    width: 159px;
+    height: 38px;
+    border-radius: 5px;
+    color: #fff;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    display: flex;
+    background-color: #000;
+    font-size: 13px;
+    cursor: pointer;
+  }
 `;
 const PCFilterKeyword = styled.div`
   font-size: 13px;
