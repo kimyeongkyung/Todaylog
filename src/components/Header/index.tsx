@@ -1,12 +1,35 @@
 import styled from "styled-components";
 import { Duck, Logo, Mypage, Write } from "../icons";
 import { useRouter } from "next/router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import LoginCheckModal from "../Modal/LoginCheckModal";
+import axios from "axios";
 
-const Header = () => {
+const Header = ({ isLogin }: { isLogin: boolean }) => {
   const { push, pathname } = useRouter();
   const [isOpen, setIsOpen] = useState(false);
+  // 프론트엔드 로그인 상태 확인
+  // useEffect(() => {
+  //   const checkLoginStatus = async () => {
+  //     try {
+  //       const response = await axios.get(
+  //         "http://localhost:4000/check-login-status"
+  //       );
+
+  //       if (response.data.isLogin) {
+  //         // 로그인 상태인 경우
+  //         console.log("User is logged in:", response.data.user);
+  //       } else {
+  //         // 로그인 상태가 아닌 경우
+  //         console.log("User is not logged in");
+  //       }
+  //     } catch (error) {
+  //       console.error("Error checking login status:", error);
+  //     }
+  //   };
+
+  //   checkLoginStatus();
+  // }, []);
 
   return (
     <>
@@ -20,14 +43,40 @@ const Header = () => {
             <Logo />
           </WrapLogo>
           {/* mobile */}
-          <LoginBtn
-            onClick={() => {
-              // setIsOpen(true);
-              push("/mypage");
-            }}
-          >
-            로그인
-          </LoginBtn>
+          {isLogin ? (
+            <WrapProfile>
+              <div>
+                <Duck />
+              </div>
+              <div
+                style={{
+                  fontSize: "12px",
+                  paddingLeft: "5px",
+                  lineHeight: "30px",
+                }}
+              >
+                나무늘보 님
+              </div>
+            </WrapProfile>
+          ) : (
+            // <LoginBtn
+            //   onClick={() => {
+            //     // setIsOpen(true);
+            //     push("/mypage");
+            //   }}
+            // >
+            //   내 정보
+            // </LoginBtn>
+            <LoginBtn
+              onClick={() => {
+                // setIsOpen(true);
+                push("/login");
+              }}
+            >
+              로그인
+            </LoginBtn>
+          )}
+
           <WrapCon>
             <WrapTab>
               <div
@@ -67,28 +116,45 @@ const Header = () => {
 
             {/* PC */}
             <PCWrapRightCon>
-              <PCWriteBtn
-                onClick={() => {
-                  // setIsOpen(true);
-                  push("/write");
-                }}
-              >
-                <div className="icon">
-                  <Write width="20px" height="20px" />
-                </div>
-                <div className="text">글쓰기</div>
-              </PCWriteBtn>
-              <PCLoginBtn
-                onClick={() => {
-                  // setIsOpen(true);
-                  push("/mypage");
-                }}
-              >
-                <div className="icon">
-                  <Mypage width="20px" height="20px" />
-                </div>
-                <div className="text">로그인</div>
-              </PCLoginBtn>
+              {isLogin ? (
+                <>
+                  <PCWriteBtn
+                    onClick={() => {
+                      // setIsOpen(true);
+                      push("/write");
+                    }}
+                  >
+                    <div className="icon">
+                      <Write width="20px" height="20px" />
+                    </div>
+                    <div className="text">글쓰기</div>
+                  </PCWriteBtn>
+
+                  <PCLoginBtn
+                    onClick={() => {
+                      // setIsOpen(true);
+                      push("/mypage");
+                    }}
+                  >
+                    <div className="icon">
+                      <Mypage width="20px" height="20px" />
+                    </div>
+                    <div className="text">내 정보</div>
+                  </PCLoginBtn>
+                </>
+              ) : (
+                <PCLoginBtn
+                  onClick={() => {
+                    // setIsOpen(true);
+                    push("/login");
+                  }}
+                >
+                  <div className="icon">
+                    <Mypage width="20px" height="20px" />
+                  </div>
+                  <div className="text">로그인</div>
+                </PCLoginBtn>
+              )}
             </PCWrapRightCon>
           </WrapCon>
           {/* <WrapProfile>
@@ -201,6 +267,19 @@ const LoginBtn = styled.div`
   position: absolute;
   top: 14px;
   right: 16px;
+  @media (min-width: 600px) {
+    display: none;
+  }
+`;
+const WrapProfile = styled.div`
+  position: absolute;
+  right: 16px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  border: 1px solid #ffc700;
+  padding: 3px 5px;
+  border-radius: 5px;
   @media (min-width: 600px) {
     display: none;
   }

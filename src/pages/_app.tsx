@@ -8,7 +8,6 @@ import { AppProps } from "next/app";
 import Navigation from "@/components/Navigation";
 import Header from "@/components/Header";
 import axios from "axios";
-import { NaverMap, NavermapsProvider } from "react-naver-maps";
 import Script from "next/script";
 import { QueryClient, QueryClientProvider } from "react-query";
 
