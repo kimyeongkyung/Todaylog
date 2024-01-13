@@ -13,6 +13,7 @@ import { useFormContext } from "react-hook-form";
 import styled from "styled-components";
 
 interface SelectPlaceType {
+  id: string;
   title: string;
   address: string;
   roadAddress: string;
@@ -53,9 +54,7 @@ const FirstPlace = ({
   const [comment, setComment] = useState({});
 
   const { setValue, getValues, register } = useFormContext();
-  const [selectedHashTags, setSelectedHashTags] = useState<string[]>(
-    JSON.parse(localStorage.getItem("selectedFirstHashTags")) || []
-  );
+  const [selectedHashTags, setSelectedHashTags] = useState<string[]>([]);
 
   // 키워드가 변경될 때마다 로컬 스토리지에 저장
   useEffect(() => {
@@ -195,7 +194,7 @@ const FirstPlace = ({
     };
     console.log(newPlaceData);
 
-    setFormData((prevData) => {
+    setFormData((prevData: any) => {
       console.log("끌고온 값:", prevData);
       return {
         ...prevData,
@@ -222,7 +221,6 @@ const FirstPlace = ({
             }}
           >
             {keywordList.map((item, key) => {
-              const isCardClicked = clickKeyword.includes(key); // 해당 카드가 클릭되었는지 확인
               const isSelected = selectedKeyword.includes(item);
               return (
                 <Keyword
@@ -257,7 +255,7 @@ const FirstPlace = ({
             <WrapSearchResult showResults={searchResults.length > 0}>
               {searchResults?.length > 0 && (
                 <>
-                  {searchResults.map((result) => (
+                  {searchResults.map((result: SelectPlaceType) => (
                     <div
                       onClick={() => handlePlaceSelection(result)}
                       key={result.id}
@@ -594,7 +592,8 @@ const AddPlaceBtn = styled.button`
   background-color: #ffc700;
 `;
 const WrapSearchResult = styled.div`
-  display: ${(props) => (props.showResults ? "flex" : "none")};
+  display: ${(props: { showResults: boolean }) =>
+    props.showResults ? "flex" : "none"};
   flex-direction: column;
 
   position: absolute;

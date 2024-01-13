@@ -12,6 +12,7 @@ import { useFormContext } from "react-hook-form";
 import styled from "styled-components";
 
 interface SelectPlaceType {
+  id: string;
   title: string;
   address: string;
   roadAddress: string;
@@ -49,28 +50,8 @@ const FirstPlace = ({
   });
 
   const [comment, setComment] = useState({});
-  const [selectedHashTags, setSelectedHashTags] = useState<string[]>(
-    JSON.parse(localStorage.getItem("selectedSecondHashTags")) || []
-  );
+  const [selectedHashTags, setSelectedHashTags] = useState<string[]>([]);
   const { setValue, getValues, register } = useFormContext();
-
-  // 키워드가 변경될 때마다 로컬 스토리지에 저장
-  useEffect(() => {
-    localStorage.setItem("selectedSecondKeyword", selectedKeyword);
-  }, [selectedKeyword]);
-
-  // 이미지가 변경될 때마다 로컬 스토리지에 저장
-  useEffect(() => {
-    localStorage.setItem("selectedSecondImages", JSON.stringify(images));
-  }, [images]);
-
-  // 해시태그가 변경될 때마다 로컬 스토리지에 저장
-  useEffect(() => {
-    localStorage.setItem(
-      "selectedSecondHashTags",
-      JSON.stringify(selectedHashTags)
-    );
-  }, [selectedHashTags]);
 
   // 장소 검색 - 네이버 오픈 api
   const handleSearch = async () => {
@@ -168,6 +149,14 @@ const FirstPlace = ({
     setImages([...images, ...uploadedImages]);
   };
 
+  // 이미지 미리보기를 위한 useEffect
+  useEffect(() => {
+    if (images.length > 0) {
+      // 이미지가 업로드되면 첫 번째 이미지의 URL을 설정
+      setImages([images[0]]);
+    }
+  }, [images]);
+
   const handleNext = () => {
     // 여기서 필요한 데이터 수집
     const newPlaceData = {
@@ -192,7 +181,7 @@ const FirstPlace = ({
     };
     console.log(newPlaceData);
 
-    setFormData((prevData) => {
+    setFormData((prevData: any) => {
       console.log("끌고온 값:", prevData);
       return {
         ...prevData,
@@ -215,7 +204,6 @@ const FirstPlace = ({
             }}
           >
             {keywordList.map((item, key) => {
-              const isCardClicked = clickKeyword.includes(key); // 해당 카드가 클릭되었는지 확인
               const isSelected = selectedKeyword.includes(item);
               return (
                 <Keyword
@@ -250,7 +238,7 @@ const FirstPlace = ({
             <WrapSearchResult showResults={searchResults.length > 0}>
               {searchResults?.length > 0 && (
                 <>
-                  {searchResults.map((result) => (
+                  {searchResults.map((result: SelectPlaceType) => (
                     <div
                       onClick={() => handlePlaceSelection(result)}
                       key={result.id}
@@ -611,7 +599,8 @@ const AddPlaceBtn = styled.button`
   background-color: #ffc700;
 `;
 const WrapSearchResult = styled.div`
-  display: ${(props) => (props.showResults ? "flex" : "none")};
+  display: ${(props: { showResults: boolean }) =>
+    props.showResults ? "flex" : "none"};
   flex-direction: column;
   background-color: beige;
   position: absolute;

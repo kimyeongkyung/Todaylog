@@ -8,7 +8,7 @@ const NaverMap: React.FC<NaverMapProps> = ({ markers }) => {
   console.log(markers);
 
   useEffect(() => {
-    let map = null;
+    let map: naver.maps.Map | undefined; // 초기값을 undefined로 변경
     let markerList = [];
 
     const initMap = () => {
