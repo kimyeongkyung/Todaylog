@@ -17,7 +17,10 @@ const useGetWherePosts = (): WhereDataType[] | null => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch("http://localhost:4000/where/locals");
+        const response = await fetch(
+          // "https://todaylog.herokuapp.com/where/locals"
+          "http://localhost:4000/where/locals"
+        );
 
         if (!response.ok) {
           throw new Error("Failed to fetch posts");

@@ -22,6 +22,7 @@ interface WhereDetailDataType {
   placeName: string;
   address: string;
   roadAddress: string;
+  images: string;
 }
 
 const WhereDetail = ({}) => {
@@ -40,7 +41,14 @@ const WhereDetail = ({}) => {
 
   const reviews = useGetWhereDetailReviews(category, lat, lng);
 
-  const singleMarkers = [{ lat: data?.lat, lng: data?.lng }];
+  const singleMarkers = [
+    {
+      lat: data?.lat,
+      lng: data?.lng,
+      name: data?.placeName,
+      category: String(query?.category),
+    },
+  ];
 
   return (
     <Container>
@@ -48,22 +56,28 @@ const WhereDetail = ({}) => {
         <WhatDetailImg>
           <div>
             <Image
-              src="/images/sample1.png"
+              src={data?.images}
               alt="이미지1"
+              width={300}
+              height={300}
               className="img"
             ></Image>
           </div>
           <div>
             <Image
-              src="/images/sample1.png"
+              src={data?.images}
               alt="이미지1"
+              width={300}
+              height={300}
               className="img"
             ></Image>
           </div>
           <div>
             <Image
-              src="/images/sample1.png"
+              src={data?.images}
               alt="이미지1"
+              width={300}
+              height={300}
               className="img"
             ></Image>
           </div>
@@ -83,8 +97,10 @@ const WhereDetail = ({}) => {
         <MobileWhatDetailImg>
           <div>
             <Image
-              src="/images/sample3.png"
+              src={data?.images}
               alt="오늘뭐하지 상세 이미지"
+              width={300}
+              height={300}
               className="img"
             ></Image>
           </div>
@@ -150,7 +166,7 @@ const WhereDetail = ({}) => {
                   }}
                 >
                   <Image
-                    src="/images/sample1.png"
+                    src={item?.images}
                     alt="where-card"
                     width={140}
                     height={140}
@@ -171,7 +187,7 @@ const WhereDetail = ({}) => {
                       <Writer>
                         <div className="profileImg">
                           <Image
-                            src="/images/sample5.png"
+                            src={item?.images}
                             alt="profile"
                             className="img"
                             width={20}
@@ -206,21 +222,27 @@ const WhereDetail = ({}) => {
                   <ReviewImg>
                     <div>
                       <Image
-                        src="/images/sample1.png"
+                        src={item?.images}
+                        width={20}
+                        height={20}
                         alt="어디가지 상세 이미지1"
                         className="img"
                       ></Image>
                     </div>
                     <div>
                       <Image
-                        src="/images/sample1.png"
+                        src={item?.images}
+                        width={20}
+                        height={20}
                         alt="어디가지 상세 이미지1"
                         className="img"
                       ></Image>
                     </div>
                     <div>
                       <Image
-                        src="/images/sample1.png"
+                        src={item?.images}
+                        width={20}
+                        height={20}
                         alt="어디가지 상세 이미지1"
                         className="img"
                       ></Image>
@@ -248,16 +270,16 @@ const WrapCon = styled.div`
   }
 `;
 const WhatDetailImg = styled.div`
-  background-color: #aeaeae;
   display: flex;
   justify-content: space-between;
   width: 100%;
-  div {
+  gap: 10px;
+  /* div {
     width: calc(33.33%);
     box-sizing: border-box;
     aspect-ratio: 1.3 / 1;
     object-fit: cover;
-  }
+  } */
   div:nth-of-type(1) {
     border-left: none;
   }

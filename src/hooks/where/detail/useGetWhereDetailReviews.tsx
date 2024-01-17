@@ -6,6 +6,8 @@ interface ReviewDataType {
   postId: string;
   title: string;
   comment: string;
+  ReviewDataType: string;
+  images: string;
 }
 
 const useGetWhereDetailReviews = (
@@ -15,6 +17,7 @@ const useGetWhereDetailReviews = (
 ): ReviewDataType[] => {
   const fetchPostData = async () => {
     const response = await fetch(
+      // `https://todaylog.herokuapp.com/reviews?lat=${lat}&lng=${lng}&category=${category}`
       `http://localhost:4000/reviews?lat=${lat}&lng=${lng}&category=${category}`
     );
 

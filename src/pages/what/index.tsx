@@ -40,6 +40,7 @@ const What = () => {
         <WrapPCCon>
           <PCCardList>
             {data?.map((item) => {
+              console.log(item);
               const addressParts = item?.address.split(/[\s,]+/);
 
               // 필요한 부분만 선택
@@ -73,7 +74,7 @@ const What = () => {
                       <Writer>
                         <div className="profileImg">
                           <Image
-                            src="/images/sample5.png"
+                            src={item?.images}
                             alt="profile"
                             width={20}
                             height={20}
@@ -127,8 +128,10 @@ const What = () => {
                 <Title>[하루일기] {item.title}</Title>
                 <ReviewImg>
                   <Image
-                    src="/images/sample1.png"
+                    src={item?.images}
                     alt="이미지1"
+                    width={140}
+                    height={140}
                     style={{
                       width: "calc(33.33%)",
                       borderLeft: "1px solid #000",
@@ -138,8 +141,10 @@ const What = () => {
                     }}
                   ></Image>
                   <Image
-                    src="/images/sample2.png"
+                    src={item?.images}
                     alt="이미지2"
+                    width={140}
+                    height={140}
                     style={{
                       width: "calc(33.33%)",
                       borderLeft: "1px solid #000",
@@ -149,7 +154,9 @@ const What = () => {
                     }}
                   ></Image>
                   <Image
-                    src="/images/sample3.png"
+                    src={item?.images}
+                    width={140}
+                    height={140}
                     alt="이미지3"
                     style={{
                       width: "calc(33.33%)",

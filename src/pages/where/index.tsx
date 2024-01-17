@@ -877,7 +877,6 @@ const SearchBtn = styled.div`
   width: 180px;
   height: 38px;
   &:hover {
-    background-color: #e0ae00;
   }
   position: absolute;
   left: 50%;

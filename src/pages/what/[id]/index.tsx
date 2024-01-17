@@ -33,13 +33,39 @@ const WhatDetail = () => {
 
   //지도에 다중마커 표시
   const multiMarkers = [
-    { lat: restaurant?.restaurantLat, lng: restaurant?.restaurantLng },
-    { lat: cafe?.cafeLat, lng: cafe?.cafeLng },
-    { lat: leisure?.leisureLat, lng: leisure?.leisureLng },
+    {
+      lat: restaurant?.restaurantLat,
+      lng: restaurant?.restaurantLng,
+      name: restaurant?.restaurantName,
+      category: "restaurant",
+    },
+    {
+      lat: cafe?.cafeLat,
+      lng: cafe?.cafeLng,
+      name: cafe?.cafeName,
+      category: "cafe",
+    },
+    {
+      lat: leisure?.leisureLat,
+      lng: leisure?.leisureLng,
+      name: leisure?.leisureName,
+      category: "leisure",
+    },
   ]
     .filter((marker) => marker.lat !== undefined && marker.lng !== undefined)
-    .map((marker) => ({ lat: marker.lat!, lng: marker.lng! }));
+    .map((marker) => ({
+      lat: marker.lat!,
+      lng: marker.lng!,
+      name: marker.name!,
+      category: marker.category!,
+    }));
 
+  // const markersName = [
+  //   { name: restaurant?.restaurantName },
+  //   { name: cafe?.cafeName },
+  //   { name: leisure?.leisureName },
+  // ];
+  // console.log(markersName);
   //지번주소 복사
   const restaurantAddressToCopy = restaurant?.restaurantAddress || "";
   const cafeAddressToCopy = cafe?.cafeAddress || "";
@@ -160,24 +186,30 @@ const WhatDetail = () => {
                     <WhatDetailImg>
                       <div>
                         <Image
-                          src="/images/sample1.png"
+                          src={restaurant?.restaurantImages}
+                          width={264}
+                          height={264}
                           alt="이미지1"
                           className="img"
-                        ></Image>{" "}
+                        ></Image>
                       </div>
                       <div>
                         <Image
-                          src="/images/sample1.png"
+                          src={restaurant?.restaurantImages}
+                          width={264}
+                          height={264}
                           alt="이미지1"
                           className="img"
-                        ></Image>{" "}
+                        ></Image>
                       </div>
                       <div>
                         <Image
-                          src="/images/sample1.png"
+                          src={restaurant?.restaurantImages}
+                          width={264}
+                          height={264}
                           alt="이미지1"
                           className="img"
-                        ></Image>{" "}
+                        ></Image>
                       </div>
                     </WhatDetailImg>
                     <Comment>
@@ -257,24 +289,30 @@ const WhatDetail = () => {
                     <WhatDetailImg>
                       <div>
                         <Image
-                          src="/images/sample1.png"
+                          src={cafe?.cafeImages}
+                          width={264}
+                          height={264}
                           alt="이미지1"
                           className="img"
-                        ></Image>{" "}
+                        ></Image>
                       </div>
                       <div>
                         <Image
-                          src="/images/sample1.png"
+                          src={cafe?.cafeImages}
+                          width={264}
+                          height={264}
                           alt="이미지1"
                           className="img"
-                        ></Image>{" "}
+                        ></Image>
                       </div>
                       <div>
                         <Image
-                          src="/images/sample1.png"
+                          src={cafe?.cafeImages}
+                          width={264}
+                          height={264}
                           alt="이미지1"
                           className="img"
-                        ></Image>{" "}
+                        ></Image>
                       </div>
                     </WhatDetailImg>
                     <Comment>
@@ -354,24 +392,30 @@ const WhatDetail = () => {
                     <WhatDetailImg>
                       <div>
                         <Image
-                          src="/images/sample1.png"
+                          src={leisure?.leisureImages}
+                          width={264}
+                          height={264}
                           alt="이미지1"
                           className="img"
-                        ></Image>{" "}
+                        ></Image>
                       </div>
                       <div>
                         <Image
-                          src="/images/sample1.png"
+                          src={leisure?.leisureImages}
+                          width={264}
+                          height={264}
                           alt="이미지1"
                           className="img"
-                        ></Image>{" "}
+                        ></Image>
                       </div>
                       <div>
                         <Image
-                          src="/images/sample1.png"
+                          src={leisure?.leisureImages}
+                          width={264}
+                          height={264}
                           alt="이미지1"
                           className="img"
-                        ></Image>{" "}
+                        ></Image>
                       </div>
                     </WhatDetailImg>
                     <Comment>
@@ -543,10 +587,16 @@ const WhatDetailImg = styled.div`
   justify-content: space-between;
   gap: 10px;
   div {
-    width: calc(33.33%);
-    box-sizing: border-box;
-    aspect-ratio: 1.3 / 1;
-    object-fit: cover;
+    flex: 1;
+    max-width: calc(
+      33.33% - 10px
+    ); /* 각 이미지에 대해 33.33% 너비 지정 및 간격은 10px */
+  }
+  .img {
+    width: 100%;
+    max-width: 100%; /* 부모 컨테이너의 너비에 맞게 조정 */
+    height: auto; /* 가로세로 비율을 유지하면서 조정 */
+    border-radius: 8px; /* 더 나은 외관을 위해 border-radius 추가 */
   }
   div:nth-of-type(1) {
     border-left: none;

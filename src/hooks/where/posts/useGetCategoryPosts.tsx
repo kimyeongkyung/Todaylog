@@ -49,6 +49,7 @@ const useGetCategoryPosts = (
     const fetchData = async () => {
       try {
         const response = await fetch(
+          // `https://todaylog.herokuapp.com/where/${encodedCategory}`
           `http://localhost:4000/where/${encodedCategory}`
         );
 

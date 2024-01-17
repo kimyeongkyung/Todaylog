@@ -14,6 +14,7 @@ const useGetWhatPosts = (): PostData[] | null => {
   useEffect(() => {
     const fetchData = async () => {
       try {
+        // const response = await fetch("https://todaylog.herokuapp.com/what");
         const response = await fetch("http://localhost:4000/what");
 
         if (!response.ok) {

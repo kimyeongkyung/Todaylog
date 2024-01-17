@@ -1,3 +1,4 @@
+import { StaticImport } from "next/dist/shared/lib/get-img-props";
 import { useEffect, useState } from "react";
 import { useQuery } from "react-query";
 
@@ -7,7 +8,7 @@ interface GetWhatDatailPostType {
     id: string;
     restaurantName: string;
     restaurantComment: string;
-    restaurantImages: string[];
+    restaurantImages: StaticImport | string;
     restaurantTags: string[];
     restaurantLat: number;
     restaurantLng: number;
@@ -18,7 +19,7 @@ interface GetWhatDatailPostType {
     id: string;
     cafeName: string;
     cafeComment: string;
-    cafeImages: string[];
+    cafeImages: StaticImport | string;
     cafeTags: string[];
     cafeLat: number;
     cafeLng: number;
@@ -29,7 +30,7 @@ interface GetWhatDatailPostType {
     id: string;
     leisureName: string;
     leisureComment: string;
-    leisureImages: string[];
+    leisureImages: StaticImport | string;
     leisureTags: string[];
     leisureLat: number;
     leisureLng: number;
@@ -41,6 +42,7 @@ interface GetWhatDatailPostType {
 const useGetWhatDetailPost = (postId: string | undefined) => {
   const fetchPostData = async () => {
     const response = await fetch(
+      // `https://todaylog.herokuapp.com/what/${String(postId)}`
       `http://localhost:4000/what/${String(postId)}`
     );
 
